@@ -1,0 +1,7 @@
+<packaging>pom</packaging>
+
+<modules>
+<module>monitoring-service</module>
+<module>alert-service</module>
+<module>dashboard-service</module>
+</modules>
