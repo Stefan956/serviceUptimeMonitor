@@ -1,7 +1,19 @@
-<packaging>pom</packaging>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-<modules>
-<module>monitoring-service</module>
-<module>alert-service</module>
-<module>dashboard-service</module>
-</modules>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.Stefan956.serviceUptimeMonitor</groupId>
+    <artifactId>service-uptime-monitor</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>monitoring-service</module>
+        <module>alert-service</module>
+        <module>dashboard-service</module>
+    </modules>
+
+</project>

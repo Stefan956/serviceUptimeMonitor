@@ -1,0 +1,122 @@
+spring:
+  application:
+    name: monitoring-service
+
+  profiles:
+    active: dev   # default profile
+
+---
+# =========================
+# DEV PROFILE
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/uptime_monitor
+#    username: postgres
+#    password: postgres
+#    driver-class-name: org.postgresql.Driver
+
+  datasource:
+    url: jdbc:h2:mem:testdb//localhost:8081/uptime_monitor
+    username: h2
+    password: h2
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+        enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+
+server:
+  port: 8081
+
+monitoring:
+  scheduler:
+    enabled: true
+    fixed-delay-ms: 30000
+
+alert:
+  service:
+    url: http://localhost:8082/api/alerts/status-change
+
+---
+# =========================
+# DOCKER PROFILE
+# Running with Docker Compose
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/uptime_monitor
+    username: uptime_user
+    password: uptime_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+server:
+  port: 8080
+
+monitoring:
+  scheduler:
+    enabled: true
+    fixed-delay-ms: 30000
+
+alert:
+  service:
+    url: http://alert-service:8080/api/alerts/status-change
+
+---
+# =========================
+# KUBERNETES PROFILE
+# Running in Kubernetes/Minikube
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: k8s
+
+  datasource:
+    url: jdbc:postgresql://postgres-service:5432/uptime_monitor
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+server:
+  port: 8080
+
+monitoring:
+  scheduler:
+    enabled: true
+    fixed-delay-ms: 30000
+
+alert:
+  service:
+    url: http://alert-service/api/alerts/status-change
