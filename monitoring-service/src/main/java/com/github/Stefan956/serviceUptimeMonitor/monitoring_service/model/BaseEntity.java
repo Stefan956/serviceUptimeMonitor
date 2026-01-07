@@ -6,15 +6,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @MappedSuperclass
 @Getter @Setter @ToString
 public class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name="service_id", updatable = false, nullable = false)
-    private Long id;
+    private UUID id;
 
     @Column(name="created_at" ,updatable = false)
     private LocalDateTime createdAt;
