@@ -1,39 +1,8 @@
 -- ============================
--- MONITORED_SERVICE TABLE
--- ============================
-CREATE TABLE monitored_service (
-                                   id UUID PRIMARY KEY,
-                                   name VARCHAR(255) NOT NULL,
-                                   url VARCHAR(500) NOT NULL,
-                                   check_interval INT NOT NULL,
-                                   enabled BOOLEAN NOT NULL,
-                                   created_at TIMESTAMP,
-                                   updated_at TIMESTAMP
-);
-
--- ============================
--- SERVICE_STATUS TABLE
--- ============================
-CREATE TABLE service_status (
-                                id UUID PRIMARY KEY,
-                                monitored_service_id UUID NOT NULL,
-                                status VARCHAR(10) NOT NULL,
-                                http_status_code INT NOT NULL,
-                                response_time BIGINT,
-                                checked_at TIMESTAMP NOT NULL,
-                                created_at TIMESTAMP,
-                                updated_at TIMESTAMP,
-
-                                CONSTRAINT fk_service_status_service
-                                    FOREIGN KEY (monitored_service_id)
-                                        REFERENCES monitored_service(id)
-);
-
--- ============================
 -- INSERT MONITORED SERVICES
 -- ============================
 INSERT INTO monitored_service (
-    id, name, url, check_interval, enabled, created_at
+    service_id, name, url, check_interval, enabled, created_at
 ) VALUES
       (
           '11111111-1111-1111-1111-111111111111',
@@ -64,7 +33,7 @@ INSERT INTO monitored_service (
 -- INSERT SERVICE STATUSES
 -- ============================
 INSERT INTO service_status (
-    id,
+    service_id,
     monitored_service_id,
     status,
     http_status_code,
