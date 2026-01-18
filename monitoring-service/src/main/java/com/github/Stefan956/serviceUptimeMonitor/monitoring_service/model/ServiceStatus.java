@@ -2,7 +2,6 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Status;
 import lombok.*;
 
 import java.time.LocalDateTime;

@@ -1,15 +1,11 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.controller;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service.MonitorService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 //TODO: validate input; call service layer; return http responses
 
 @RestController
-public class MonitoriedServiceController {
+public class MonitoredServiceController {
     //    @Autowired
 //    private MonitorService monitorService;
 //

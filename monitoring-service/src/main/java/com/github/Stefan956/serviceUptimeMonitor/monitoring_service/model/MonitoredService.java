@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 @Entity
 @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
 public class MonitoredService extends BaseEntity {
