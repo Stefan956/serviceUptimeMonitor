@@ -14,8 +14,9 @@ public class ServiceStatus extends BaseEntity {
     @JoinColumn(name="monitored_service_id", nullable = false)
     private MonitoredService monitoredService;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="status", nullable = false)
-    private String status; //UP or DOWN
+    private ServiceHealthStatus status;
 
     @Column(name="http_status_code", nullable = false)
     private int httpStatusCode;

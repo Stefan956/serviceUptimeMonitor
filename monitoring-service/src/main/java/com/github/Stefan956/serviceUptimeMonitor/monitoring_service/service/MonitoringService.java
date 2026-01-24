@@ -3,6 +3,7 @@ package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,9 +47,6 @@ public class MonitoringService {
                     .toBodilessEntity()
                     .block();
 
-            //Flow:
-            //Send HTTP Request -> Stop this thread -> Wait for response -> Resume only when response arrives or times out
-
             if (response == null) {
                 throw new IllegalStateException("No response received");
             }
@@ -56,35 +54,51 @@ public class MonitoringService {
             HttpStatusCode statusCode = response.getStatusCode();
             long responseTime = System.currentTimeMillis() - start;
 
-            saveStatus(service, "UP", statusCode.value(), responseTime);
+            saveStatus(
+                    service,
+                    ServiceHealthStatus.UP,
+                    statusCode.value(),
+                    responseTime
+            );
 
             log.debug("Service {} is UP ({} ms)",
-            service.getName(), responseTime);
+                    service.getName(), responseTime);
 
         } catch (Exception e) {
             log.warn("Service {} is DOWN: {}",
                     service.getName(), e.getMessage());
 
-            saveStatus(service, "DOWN", 0, 0);
+            saveStatus(
+                    service,
+                    ServiceHealthStatus.DOWN,
+                    0,
+                    0
+            );
         }
-
     }
 
-    private void saveStatus(MonitoredService service, String currentStatus, int httpStatusCode, long responseTimeMs) {
+    private void saveStatus(
+            MonitoredService service,
+            ServiceHealthStatus currentStatus,
+            int httpStatusCode,
+            long responseTimeMs
+    ) {
+
         Optional<ServiceStatus> lastStatus =
                 statusRepository.findTopByMonitoredServiceOrderByCheckedAtDesc(service);
 
         // Detect status change
-        if (lastStatus.isPresent() && !lastStatus.get().getStatus().equals(currentStatus)) {
+        if (lastStatus.isPresent()
+                && lastStatus.get().getStatus() != currentStatus) {
+
             log.info("Service {} changed status from {} to {}",
                     service.getName(),
                     lastStatus.get().getStatus(),
                     currentStatus);
 
-            //TODO: Notify about status change
-            //alertClient.notifyStatusChange(service, currentStatus);
+            // TODO: Notify Alert Service
+            // alertClient.notifyStatusChange(service, currentStatus);
         }
-
 
         ServiceStatus status = new ServiceStatus();
         status.setMonitoredService(service);
@@ -95,5 +109,4 @@ public class MonitoringService {
 
         statusRepository.save(status);
     }
-
 }
