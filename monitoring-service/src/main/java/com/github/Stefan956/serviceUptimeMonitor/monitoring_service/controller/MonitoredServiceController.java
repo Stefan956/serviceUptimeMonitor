@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 //TODO: validate input; call service layer; return http responses
 
 @RestController
+@RequestMapping("/api/monitoring")
 public class MonitoredServiceController {
     //    @Autowired
 //    private MonitorService monitorService;

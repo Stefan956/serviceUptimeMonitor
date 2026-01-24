@@ -4,11 +4,9 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.Monitore
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
