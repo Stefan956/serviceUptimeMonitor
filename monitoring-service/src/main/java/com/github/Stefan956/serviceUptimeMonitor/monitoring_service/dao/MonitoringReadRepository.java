@@ -1,13 +1,16 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao;
 
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface MonitoringReadRepository {
+public interface MonitoringReadRepository extends JpaRepository<ServiceStatus, UUID> {
     @Query("""
             SELECT new com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusSummaryDto(
                 ms.id,

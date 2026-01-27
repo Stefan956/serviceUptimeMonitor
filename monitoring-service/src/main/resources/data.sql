@@ -67,4 +67,49 @@ INSERT INTO service_status (
           95,
           CURRENT_TIMESTAMP,
           CURRENT_TIMESTAMP
+      ),
+      (
+          'dddddddd-dddd-dddd-dddd-dddddddddddd',
+          '33333333-3333-3333-3333-333333333333',
+          'UP',
+          207,
+          350,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
+      ),
+      (
+          'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
+          '22222222-2222-2222-2222-222222222222',
+          'UP',
+          200,
+          140,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
+      ),
+      (
+          'ffffffff-ffff-ffff-ffff-ffffffffffff',
+          '11111111-1111-1111-1111-111111111111',
+          'DOWN',
+          404,
+          0,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
+      ),
+      (
+          '99999999-9999-9999-9999-999999999999',
+          '33333333-3333-3333-3333-333333333333',
+          'DOWN',
+          403,
+          0,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
+      ),
+      (
+          '12121212-1212-1212-1212-121212121212',
+          '22222222-2222-2222-2222-222222222222',
+          'UP',
+          200,
+          88,
+          CURRENT_TIMESTAMP,
+          CURRENT_TIMESTAMP
       );

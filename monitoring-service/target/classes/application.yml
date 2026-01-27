@@ -36,17 +36,17 @@ spring:
     init:
       mode: always
 
-  monitoring:
-    scheduler:
-     enabled: true
-     true fixed-delay-ms: 30000
-
   alert:
     service:
       url: http://localhost:8082/api/alerts/status-change
 
   server:
     port: 8080
+
+monitoring:
+  scheduler:
+    enabled: true
+    fixed-delay-ms: 30000
 ---
 # =========================
 # DOCKER PROFILE
