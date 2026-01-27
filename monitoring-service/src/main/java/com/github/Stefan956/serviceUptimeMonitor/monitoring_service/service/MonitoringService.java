@@ -1,7 +1,9 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.client.AlertServiceClient;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeDto;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
@@ -23,6 +25,7 @@ public class MonitoringService {
     private final MonitoredServiceRepository serviceRepository;
     private final ServiceStatusRepository statusRepository;
     private final WebClient webClient;
+    private final AlertServiceClient alertServiceClient;
 
     public void checkAllServices() {
         List<MonitoredService> services = serviceRepository.findByEnabledTrue();
@@ -96,8 +99,16 @@ public class MonitoringService {
                     lastStatus.get().getStatus(),
                     currentStatus);
 
-            // TODO: Notify Alert Service
-            // alertClient.notifyStatusChange(service, currentStatus);
+            // Notify Alert Service about the status change
+            alertServiceClient.notifyStatusChange(
+                    new ServiceStatusChangeDto(
+                            service.getId(),
+                            service.getName(),
+                            lastStatus.get().getStatus(),
+                            currentStatus,
+                            LocalDateTime.now()
+                    )
+            );
         }
 
         ServiceStatus status = new ServiceStatus();
