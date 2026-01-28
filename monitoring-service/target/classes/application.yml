@@ -36,12 +36,12 @@ spring:
     init:
       mode: always
 
-  alert:
-    service:
-      url: http://localhost:8082/api/alerts/status-change
-
   server:
     port: 8080
+
+alert:
+  service:
+    url: http://localhost:8082
 
 monitoring:
   scheduler:

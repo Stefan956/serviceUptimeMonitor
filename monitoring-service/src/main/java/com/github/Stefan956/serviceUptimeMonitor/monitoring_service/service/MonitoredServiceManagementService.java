@@ -3,7 +3,6 @@ package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceRequestDto;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceResponseDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.mapper.MonitoredServiceMapper;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.github.Stefan956.serviceUptimeMonitor.monitoring_service.mapper.MonitoredServiceMapper.mapToMonitoredServiceResponseDto;
-import static java.util.stream.Collectors.toList;
 
 
 @Service
@@ -70,7 +68,7 @@ public class MonitoredServiceManagementService {
         return toResponse(findEntity(serviceId));
     }
 
-    
+
     // Helper methods
     private MonitoredService findEntity(UUID serviceId) {
         return serviceRepository.findById(serviceId).

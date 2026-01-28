@@ -30,6 +30,4 @@ public class AlertServiceClient {
             log.error("Failed to send alert for service ID {}: {}", statusChange.id(), e.getMessage());
         }
     }
-
-
 }
