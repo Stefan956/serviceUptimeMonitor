@@ -27,6 +27,7 @@ public class MonitoringService {
     private final WebClient webClient;
     private final AlertServiceClient alertServiceClient;
 
+
     public void checkAllServices() {
         List<MonitoredService> services = serviceRepository.findByEnabledTrue();
 
