@@ -66,7 +66,7 @@ public class MonitoredServiceController {
 
 
     // MONITORING ENDPOINTS (READ-ONLY)
-    
+
 
     @GetMapping("/current-status")
     public List<ServiceStatusSummaryDto> currentStatus() {

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d7eca28c-dc53-44e0-9727-601925e9d77d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoredServiceManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoredServiceManagementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/MonitoringServiceApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/client/AlertServiceClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/configuration/WebClientConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/MonitoredServiceRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/MonitoringReadRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/ServiceStatusRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/MonitoredServiceRequestDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/MonitoredServiceResponseDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusChangeDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusHistoryDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusSummaryDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/mapper/MonitoredServiceMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/BaseEntity.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/MonitoredService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/ServiceHealthStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/ServiceStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/scheduler/MonitoringScheduler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoredServiceManagementService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringReadService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/target/test-classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/MonitoringServiceApplicationTests.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/stefantodorov/IdeaProjects/serviceUptimeMonitor" value="391WKTTpqI5gT2K05jcKIcNBjQv" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Stefan956"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:Stefan956/serviceUptimeMonitor.git",
+    "accountId": "f26577a0-327b-4a07-a7ea-74a773b7c010"
+  }
+}]]></component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="391WKTTpqI5gT2K05jcKIcNBjQv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.AlertServiceApplication.executor": "Debug",
+    "Spring Boot.MonitoringServiceApplication.executor": "Debug",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/stefantodorov/IdeaProjects/serviceUptimeMonitor",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.annotationProcessors",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="configurationStatuses">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <map>
+              <entry key="AlertServiceApplication" value="STOPPED" />
+              <entry key="MonitoringServiceApplication" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.MonitoringServiceApplication">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="serviceUptimeMonitor" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AlertServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="alert-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.Stefan956.serviceUptimeMonitor.alert_service.AlertServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DashboardServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="dashboard-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.Stefan956.serviceUptimeMonitor.dashboard_service.DashboardServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MonitoringServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="monitoring-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.github.Stefan956.serviceUptimeMonitor.monitoring_service.MonitoringServiceApplication" />
+      <option name="VM_PARAMETERS" value="--add-opens java.base/jdk.internal.misc=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Dio.netty.tryReflectionSetAccessible=true --sun-misc-unsafe-memory-access=allow" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Spring Boot.AlertServiceApplication" />
+      <item itemvalue="Spring Boot.DashboardServiceApplication" />
+      <item itemvalue="Spring Boot.MonitoringServiceApplication" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d7eca28c-dc53-44e0-9727-601925e9d77d" name="Changes" comment="" />
+      <created>1769863992714</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1769863992714</updated>
+      <workItem from="1769863993903" duration="764000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

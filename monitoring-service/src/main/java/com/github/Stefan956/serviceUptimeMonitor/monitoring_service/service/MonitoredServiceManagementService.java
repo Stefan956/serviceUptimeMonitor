@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class MonitoredServiceManagementService {
         service.setUrl(request.url());
         service.setCheckIntervalSeconds(request.checkIntervalSeconds());
         service.setEnabled(true);
+        service.setCreatedAt(LocalDateTime.now());
 
         MonitoredService savedService = serviceRepository.save(service);
         return mapToMonitoredServiceResponseDto(savedService);
@@ -41,6 +43,7 @@ public class MonitoredServiceManagementService {
         service.setName(request.name());
         service.setUrl(request.url());
         service.setCheckIntervalSeconds(request.checkIntervalSeconds());
+        service.setUpdatedAt(LocalDateTime.now());
 
         return mapToMonitoredServiceResponseDto(service);
     }
