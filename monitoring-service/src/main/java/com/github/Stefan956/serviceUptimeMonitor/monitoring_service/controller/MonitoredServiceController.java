@@ -21,8 +21,6 @@ import java.util.UUID;
 public class MonitoredServiceController {
 
     private final MonitoredServiceManagementService managementService;
-    private final MonitoringReadService monitoringReadService;
-
 
 
     // MANAGEMENT ENDPOINTS (ADMIN)
@@ -63,14 +61,4 @@ public class MonitoredServiceController {
     public List<MonitoredServiceResponseDto> getAll() {
         return managementService.getAll();
     }
-
-
-    // MONITORING ENDPOINTS (READ-ONLY)
-
-
-    @GetMapping("/current-status")
-    public List<ServiceStatusSummaryDto> currentStatus() {
-        return monitoringReadService.getCurrentStatuses();
-    }
-
 }

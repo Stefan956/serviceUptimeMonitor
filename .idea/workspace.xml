@@ -5,43 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d7eca28c-dc53-44e0-9727-601925e9d77d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoredServiceManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoredServiceManagementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/MonitoringServiceApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/client/AlertServiceClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/configuration/WebClientConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/MonitoredServiceRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/MonitoringReadRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/ServiceStatusRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/MonitoredServiceRequestDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/MonitoredServiceResponseDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusChangeDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusHistoryDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusSummaryDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/mapper/MonitoredServiceMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/BaseEntity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/MonitoredService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/ServiceHealthStatus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/model/ServiceStatus.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/scheduler/MonitoringScheduler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoredServiceManagementService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringReadService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/classes/data.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/target/test-classes/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/MonitoringServiceApplicationTests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/ServiceStatusRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/ServiceStatusRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusHistoryDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusHistoryDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringReadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringReadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +20,13 @@
     <persistenceIdMap>
       <entry key="_/Users/stefantodorov/IdeaProjects/serviceUptimeMonitor" value="391WKTTpqI5gT2K05jcKIcNBjQv" />
     </persistenceIdMap>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -178,7 +153,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1769863992714</updated>
-      <workItem from="1769863993903" duration="764000" />
+      <workItem from="1769863993903" duration="5013000" />
     </task>
     <servers />
   </component>
