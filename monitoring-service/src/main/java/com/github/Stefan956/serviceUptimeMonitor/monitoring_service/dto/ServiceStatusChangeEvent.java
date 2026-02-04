@@ -5,11 +5,12 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.Servic
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record ServiceStatusChangeDto(
+public record ServiceStatusChangeEvent(
         UUID id,
         String serviceName,
         ServiceHealthStatus oldStatus,
         ServiceHealthStatus newStatus,
+        int httpStatusCode,
         LocalDateTime changedAt
 ) {}
 

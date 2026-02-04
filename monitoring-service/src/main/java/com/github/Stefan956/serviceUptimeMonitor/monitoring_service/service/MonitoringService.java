@@ -3,7 +3,7 @@ package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.client.AlertServiceClient;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeEvent;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class MonitoringService {
                     .uri(service.getUrl())
                     .retrieve()
                     .toBodilessEntity()
-                    .block();
+                    .block(Duration.ofSeconds(3));
 
             if (response == null) {
                 throw new IllegalStateException("No response received");
@@ -91,6 +92,16 @@ public class MonitoringService {
         Optional<ServiceStatus> lastStatus =
                 statusRepository.findTopByMonitoredServiceOrderByCheckedAtDesc(service);
 
+        // Create and save new status
+        ServiceStatus status = new ServiceStatus();
+        status.setMonitoredService(service);
+        status.setStatus(currentStatus);
+        status.setHttpStatusCode(httpStatusCode);
+        status.setResponseTimeMs(responseTimeMs);
+        status.setCheckedAt(LocalDateTime.now());
+
+        statusRepository.save(status);
+
         // Detect status change
         if (lastStatus.isPresent()
                 && lastStatus.get().getStatus() != currentStatus) {
@@ -102,23 +113,16 @@ public class MonitoringService {
 
             // Notify Alert Service about the status change
             alertServiceClient.notifyStatusChange(
-                    new ServiceStatusChangeDto(
+                    new ServiceStatusChangeEvent(
                             service.getId(),
                             service.getName(),
                             lastStatus.get().getStatus(),
                             currentStatus,
+                            httpStatusCode,
                             LocalDateTime.now()
                     )
             );
         }
-
-        ServiceStatus status = new ServiceStatus();
-        status.setMonitoredService(service);
-        status.setStatus(currentStatus);
-        status.setHttpStatusCode(httpStatusCode);
-        status.setResponseTimeMs(responseTimeMs);
-        status.setCheckedAt(LocalDateTime.now());
-
-        statusRepository.save(status);
+        // TODO last thing to do is receive the request in Alert Service and store it in DB
     }
 }

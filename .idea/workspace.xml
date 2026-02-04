@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d7eca28c-dc53-44e0-9727-601925e9d77d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/controller/MonitoredServiceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/ServiceStatusRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dao/ServiceStatusRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusHistoryDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusHistoryDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringReadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringReadService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/client/AlertServiceClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/client/AlertServiceClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusChangeDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/dto/ServiceStatusChangeEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringService.java" beforeDir="false" afterPath="$PROJECT_DIR$/monitoring-service/src/main/java/com/github/Stefan956/serviceUptimeMonitor/monitoring_service/service/MonitoringService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +152,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1769863992714</updated>
-      <workItem from="1769863993903" duration="5013000" />
+      <workItem from="1769863993903" duration="16220000" />
     </task>
     <servers />
   </component>
