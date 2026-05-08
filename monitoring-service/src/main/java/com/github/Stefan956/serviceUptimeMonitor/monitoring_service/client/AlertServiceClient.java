@@ -27,9 +27,9 @@ public class AlertServiceClient {
                     .retrieve()
                     .toBodilessEntity()
                     .block(Duration.ofSeconds(3));
-            log.info("Alert sent for service ID {}: status changed to {}", statusChange.id(), statusChange.newStatus());
+            log.info("Alert sent for service ID {}: status changed to {}", statusChange.serviceId(), statusChange.newStatus());
         } catch (Exception e) {
-            log.error("Failed to send alert for service ID {}: {}", statusChange.id(), e.getMessage());
+            log.error("Failed to send alert for service ID {}: {}", statusChange.serviceId(), e.getMessage());
         }
     }
 }

@@ -1,0 +1,18 @@
+# Build output — never send to Docker build context
+**/target/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# Claude memory
+.claude/
+
+# Local environment overrides
+.env
+.env.*

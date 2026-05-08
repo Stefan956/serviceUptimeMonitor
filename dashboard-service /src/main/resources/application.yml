@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: dashboard-service
+
+  profiles:
+    active: dev
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+---
+# =========================
+# DEV PROFILE
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+server:
+  port: 8083
+
+monitoring:
+  service:
+    url: http://localhost:8080
+
+dashboard:
+  polling:
+    interval-ms: 30000
+
+---
+# =========================
+# DOCKER PROFILE
+# Running with Docker Compose
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+server:
+  port: 8080
+
+monitoring:
+  service:
+    url: http://monitoring-service:8080
+
+dashboard:
+  polling:
+    interval-ms: 30000

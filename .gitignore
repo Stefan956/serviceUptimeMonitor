@@ -1,0 +1,28 @@
+# ── Maven ─────────────────────────────────────────────────────────────────────
+target/
+*.jar
+*.war
+*.ear
+
+# ── IntelliJ IDEA ─────────────────────────────────────────────────────────────
+.idea/dataSources/
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/db-forest-config.xml
+.idea/workspace.xml
+.idea/shelf/
+*.iml
+*.ipr
+*.iws
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+*.env.local
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/

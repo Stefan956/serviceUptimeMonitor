@@ -9,14 +9,15 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.Servic
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -25,9 +26,12 @@ public class MonitoringService {
 
     private final MonitoredServiceRepository serviceRepository;
     private final ServiceStatusRepository statusRepository;
-    private final WebClient webClient;
+    private final HealthCheckService healthCheckService;
     private final AlertServiceClient alertServiceClient;
 
+    // Tracks when each service was last checked (keyed by service UUID).
+    // On restart every service is checked immediately on the first scheduler tick.
+    private final Map<UUID, LocalDateTime> lastCheckedAt = new ConcurrentHashMap<>();
 
     public void checkAllServices() {
         List<MonitoredService> services = serviceRepository.findByEnabledTrue();
@@ -35,94 +39,62 @@ public class MonitoringService {
         log.info("Starting monitoring cycle for {} services", services.size());
 
         for (MonitoredService service : services) {
-            checkSingleService(service);
+            if (isDue(service)) {
+                checkSingleService(service);
+            } else {
+                log.debug("Skipping service '{}' — not due yet", service.getName());
+            }
         }
 
         log.info("Monitoring cycle finished");
     }
 
-    private void checkSingleService(MonitoredService service) {
-        long start = System.currentTimeMillis();
-
-        try {
-            var response = webClient
-                    .get()
-                    .uri(service.getUrl())
-                    .retrieve()
-                    .toBodilessEntity()
-                    .block(Duration.ofSeconds(3));
-
-            if (response == null) {
-                throw new IllegalStateException("No response received");
-            }
-
-            HttpStatusCode statusCode = response.getStatusCode();
-            long responseTime = System.currentTimeMillis() - start;
-
-            saveStatus(
-                    service,
-                    ServiceHealthStatus.UP,
-                    statusCode.value(),
-                    responseTime
-            );
-
-            log.debug("Service {} is UP ({} ms)",
-                    service.getName(), responseTime);
-
-        } catch (Exception e) {
-            log.warn("Service {} is DOWN: {}",
-                    service.getName(), e.getMessage());
-
-            saveStatus(
-                    service,
-                    ServiceHealthStatus.DOWN,
-                    0,
-                    0
-            );
+    private boolean isDue(MonitoredService service) {
+        LocalDateTime last = lastCheckedAt.get(service.getId());
+        if (last == null) {
+            return true;
         }
+        return Duration.between(last, LocalDateTime.now()).toSeconds() >= service.getCheckIntervalSeconds();
     }
 
-    private void saveStatus(
-            MonitoredService service,
-            ServiceHealthStatus currentStatus,
-            int httpStatusCode,
-            long responseTimeMs
-    ) {
+    private void checkSingleService(MonitoredService service) {
+        lastCheckedAt.put(service.getId(), LocalDateTime.now());
 
+        HealthCheckService.Result result = healthCheckService.check(service.getUrl());
+
+        log.debug("Service '{}' is {} ({} ms)",
+                service.getName(), result.status(), result.responseTimeMs());
+
+        saveStatus(service, result);
+    }
+
+    private void saveStatus(MonitoredService service, HealthCheckService.Result result) {
         Optional<ServiceStatus> lastStatus =
                 statusRepository.findTopByMonitoredServiceOrderByCheckedAtDesc(service);
 
-        // Create and save new status
         ServiceStatus status = new ServiceStatus();
         status.setMonitoredService(service);
-        status.setStatus(currentStatus);
-        status.setHttpStatusCode(httpStatusCode);
-        status.setResponseTimeMs(responseTimeMs);
+        status.setStatus(result.status());
+        status.setHttpStatusCode(result.httpStatusCode());
+        status.setResponseTimeMs(result.responseTimeMs());
         status.setCheckedAt(LocalDateTime.now());
 
         statusRepository.save(status);
 
-        // Detect status change
-        if (lastStatus.isPresent()
-                && lastStatus.get().getStatus() != currentStatus) {
+        if (lastStatus.isPresent() && lastStatus.get().getStatus() != result.status()) {
+            log.info("Service '{}' changed status from {} to {}",
+                    service.getName(), lastStatus.get().getStatus(), result.status());
 
-            log.info("Service {} changed status from {} to {}",
-                    service.getName(),
-                    lastStatus.get().getStatus(),
-                    currentStatus);
-
-            // Notify Alert Service about the status change
             alertServiceClient.notifyStatusChange(
                     new ServiceStatusChangeEvent(
                             service.getId(),
                             service.getName(),
                             lastStatus.get().getStatus(),
-                            currentStatus,
-                            httpStatusCode,
+                            result.status(),
+                            result.httpStatusCode(),
                             LocalDateTime.now()
                     )
             );
         }
-        // TODO last thing to do is receive the request in Alert Service and store it in DB
     }
 }

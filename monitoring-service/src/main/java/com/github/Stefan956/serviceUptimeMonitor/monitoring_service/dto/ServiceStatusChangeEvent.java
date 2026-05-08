@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ServiceStatusChangeEvent(
-        UUID id,
+        UUID serviceId,
         String serviceName,
         ServiceHealthStatus oldStatus,
         ServiceHealthStatus newStatus,

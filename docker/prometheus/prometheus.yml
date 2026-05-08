@@ -1,0 +1,39 @@
+global:
+  scrape_interval:     15s   # How often to scrape targets
+  evaluation_interval: 15s   # How often to evaluate rules
+
+scrape_configs:
+
+  # ── Prometheus itself ─────────────────────────────────────────────────────
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # ── Monitoring Service ────────────────────────────────────────────────────
+  # Exposes custom service-health metrics AND standard JVM/Spring metrics.
+  - job_name: 'monitoring-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['monitoring-service:8080']
+        labels:
+          service: 'monitoring-service'
+
+  # ── Alert Service ─────────────────────────────────────────────────────────
+  # Standard JVM / Spring Boot actuator metrics only.
+  - job_name: 'alert-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['alert-service:8080']
+        labels:
+          service: 'alert-service'
+
+  # ── Dashboard Service ─────────────────────────────────────────────────────
+  - job_name: 'dashboard-service'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['dashboard-service:8080']
+        labels:
+          service: 'dashboard-service'

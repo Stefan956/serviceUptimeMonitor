@@ -13,7 +13,7 @@ import java.util.UUID;
 public class BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="service_id", updatable = false, nullable = false)
     private UUID id;
 

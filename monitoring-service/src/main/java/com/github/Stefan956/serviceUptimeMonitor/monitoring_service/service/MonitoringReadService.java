@@ -1,5 +1,6 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoringReadRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusHistoryDto;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class MonitoringReadService {
 
+    private final MonitoredServiceRepository monitoredServiceRepository;
     private final ServiceStatusRepository serviceStatusRepository;
     private final MonitoringReadRepository readRepository;
 
@@ -30,7 +32,7 @@ public class MonitoringReadService {
     public List<ServiceStatusHistoryDto> getHistory(UUID serviceId) {
 
         // Validation
-        if (!serviceStatusRepository.existsById(serviceId)) {
+        if (!monitoredServiceRepository.existsById(serviceId)) {
             throw new EntityNotFoundException(
                     "Service not found: " + serviceId
             );

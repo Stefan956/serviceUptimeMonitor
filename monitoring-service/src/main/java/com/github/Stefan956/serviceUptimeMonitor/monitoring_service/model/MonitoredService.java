@@ -23,6 +23,6 @@ public class MonitoredService extends BaseEntity {
     @Column(name="enabled", nullable = false)
     private boolean enabled;
 
-    @OneToMany(mappedBy = "monitoredService")
+    @OneToMany(mappedBy = "monitoredService", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceStatus> serviceStatuses;
 }

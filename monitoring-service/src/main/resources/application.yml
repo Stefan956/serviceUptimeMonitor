@@ -3,7 +3,24 @@ spring:
     name: monitoring-service
 
   profiles:
-    active: dev   # default profile
+    active: dev
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: monitoring-service
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
 
 ---
 # =========================
@@ -36,8 +53,8 @@ spring:
     init:
       mode: always
 
-  server:
-    port: 8080
+server:
+  port: 8080
 
 alert:
   service:
@@ -65,7 +82,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: false
 
 server:
@@ -78,37 +95,5 @@ monitoring:
 
 alert:
   service:
-    url: http://alert-service:8080/api/alerts/status-change
+    url: http://alert-service:8080
 
----
-# =========================
-# KUBERNETES PROFILE
-# Running in Kubernetes/Minikube
-# =========================
-spring:
-  config:
-    activate:
-      on-profile: k8s
-
-  datasource:
-    url: jdbc:postgresql://postgres-service:5432/uptime_monitor
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-
-server:
-  port: 8080
-
-monitoring:
-  scheduler:
-    enabled: true
-    fixed-delay-ms: 30000
-
-alert:
-  service:
-    url: http://alert-service/api/alerts/status-change

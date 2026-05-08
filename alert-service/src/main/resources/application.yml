@@ -1,1 +1,130 @@
-spring.application.name=alert-service
+spring:
+  application:
+    name: alert-service
+
+  profiles:
+    active: dev
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+---
+# =========================
+# DEV PROFILE
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:h2:mem:alertdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+  mail:
+    host: localhost
+    port: 1025
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+management:
+  health:
+    mail:
+      enabled: false
+
+server:
+  port: 8082
+
+
+# =========================
+# Alert-specific settings
+# =========================
+alert:
+  email:
+    enabled: false
+    from: alerts@localhost
+    to: admin@localhost
+  console:
+    enabled: true
+  cooldown-ms: 300000   # 5 min to avoid alert spam
+
+
+---
+# =========================
+# DOCKER PROFILE
+# =========================
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/alert_db
+    username: uptime_user
+    password: uptime_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+  mail:
+    host: mailhog
+    port: 1025
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+management:
+  health:
+    mail:
+      enabled: false
+
+server:
+  port: 8080
+
+alert:
+  email:
+    enabled: false
+    from: alerts@uptime.local
+    to: admin@uptime.local
+  console:
+    enabled: true
+  cooldown-ms: 300000
+
+
