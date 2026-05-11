@@ -5,12 +5,7 @@ target/
 *.ear
 
 # ── IntelliJ IDEA ─────────────────────────────────────────────────────────────
-.idea/dataSources/
-.idea/dataSources.local.xml
-.idea/dataSources.xml
-.idea/db-forest-config.xml
-.idea/workspace.xml
-.idea/shelf/
+.idea/
 *.iml
 *.ipr
 *.iws

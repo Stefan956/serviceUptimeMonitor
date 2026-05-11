@@ -5,8 +5,12 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceS
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service.MonitoringReadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ProblemDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +46,11 @@ public class MonitoringReadController {
                     "Each entry represents one scheduler execution. " +
                     "Tip: consider adding pagination for services with long histories."
     )
-    @ApiResponse(responseCode = "200", description = "Full check history for the specified service")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Full check history for the specified service"),
+            @ApiResponse(responseCode = "404", description = "Service not found",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    })
     @GetMapping("/history/{serviceId}")
     public List<ServiceStatusHistoryDto> getServiceHistoryById(
             @Parameter(description = "UUID of the monitored service", required = true)

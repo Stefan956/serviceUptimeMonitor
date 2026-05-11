@@ -89,8 +89,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://postgres:5432/alert_db
-    username: uptime_user
-    password: uptime_pass
+    username: ${POSTGRES_USER:uptime_user}
+    password: ${POSTGRES_PASSWORD:uptime_pass}
     driver-class-name: org.postgresql.Driver
 
   jpa:

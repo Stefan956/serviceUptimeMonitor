@@ -7,11 +7,11 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.mapper.Monit
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,8 +24,6 @@ public class MonitoredServiceManagementService {
 
     public MonitoredServiceResponseDto create(MonitoredServiceRequestDto request) {
         MonitoredService service = mapper.fromCreateRequest(request);
-        service.setCreatedAt(LocalDateTime.now());
-
         MonitoredService savedService = serviceRepository.save(service);
         return mapper.toResponseDto(savedService);
     }
@@ -33,7 +31,7 @@ public class MonitoredServiceManagementService {
     public MonitoredServiceResponseDto update(UUID serviceId, MonitoredServiceRequestDto request) {
         MonitoredService service = findEntity(serviceId);
         mapper.updateEntity(service, request);
-        service.setUpdatedAt(LocalDateTime.now());
+        service.setLastCheckedAt(null);
 
         return mapper.toResponseDto(service);
     }
@@ -51,11 +49,9 @@ public class MonitoredServiceManagementService {
     }
 
     @Transactional(readOnly = true)
-    public List<MonitoredServiceResponseDto> getAll() {
-        return serviceRepository.findAll()
-                .stream()
-                .map(mapper::toResponseDto)
-                .toList();
+    public Page<MonitoredServiceResponseDto> getAll(Pageable pageable) {
+        return serviceRepository.findAll(pageable)
+                .map(mapper::toResponseDto);
     }
 
     @Transactional(readOnly = true)

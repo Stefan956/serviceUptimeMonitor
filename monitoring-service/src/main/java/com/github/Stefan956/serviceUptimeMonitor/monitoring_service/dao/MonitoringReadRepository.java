@@ -21,11 +21,12 @@ public interface MonitoringReadRepository extends JpaRepository<ServiceStatus, U
                 ss.checkedAt
             )
             FROM MonitoredService ms
-            JOIN ms.serviceStatuses ss ON ss.monitoredService.id = ms.id
-            WHERE ss.checkedAt = (
-                SELECT MAX(ss2.checkedAt)
-                FROM ServiceStatus ss2
+            JOIN ms.serviceStatuses ss
+            WHERE NOT EXISTS (
+                SELECT 1 FROM ServiceStatus ss2
                 WHERE ss2.monitoredService.id = ms.id
+                AND (ss2.checkedAt > ss.checkedAt
+                     OR (ss2.checkedAt = ss.checkedAt AND ss2.id > ss.id))
             )
             """)
     List<ServiceStatusSummaryDto> findCurrentStatusPerService();

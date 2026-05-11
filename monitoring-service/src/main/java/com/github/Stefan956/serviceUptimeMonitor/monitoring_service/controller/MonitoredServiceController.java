@@ -12,11 +12,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -142,11 +145,12 @@ public class MonitoredServiceController {
 
     @Operation(
             summary = "List all registered services",
-            description = "Returns metadata for all services currently registered in the system, both enabled and disabled."
+            description = "Returns a paginated list of all services registered in the system, both enabled and disabled."
     )
-    @ApiResponse(responseCode = "200", description = "List of all registered services")
+    @ApiResponse(responseCode = "200", description = "Paginated list of registered services")
     @GetMapping("/services")
-    public List<MonitoredServiceResponseDto> getAll() {
-        return managementService.getAll();
+    public Page<MonitoredServiceResponseDto> getAll(
+            @PageableDefault(size = 50, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return managementService.getAll(pageable);
     }
 }

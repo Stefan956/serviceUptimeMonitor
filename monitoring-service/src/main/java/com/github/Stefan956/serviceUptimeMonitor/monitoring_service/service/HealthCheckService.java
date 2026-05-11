@@ -4,32 +4,24 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.Servic
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.time.Duration;
+import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class HealthCheckService {
 
-    private final WebClient webClient;
+    private final RestClient restClient;
 
     public record Result(ServiceHealthStatus status, int httpStatusCode, long responseTimeMs) {}
 
     public Result check(String url) {
         long start = System.currentTimeMillis();
         try {
-            var response = webClient
-                    .get()
+            var response = restClient.get()
                     .uri(url)
                     .retrieve()
-                    .toBodilessEntity()
-                    .block(Duration.ofSeconds(3));
-
-            if (response == null) {
-                throw new IllegalStateException("No response received");
-            }
+                    .toBodilessEntity();
 
             long responseTimeMs = System.currentTimeMillis() - start;
             return new Result(ServiceHealthStatus.UP, response.getStatusCode().value(), responseTimeMs);

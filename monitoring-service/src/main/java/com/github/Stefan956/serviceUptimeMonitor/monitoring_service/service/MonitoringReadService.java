@@ -23,12 +23,10 @@ public class MonitoringReadService {
     private final ServiceStatusRepository serviceStatusRepository;
     private final MonitoringReadRepository readRepository;
 
-    @Transactional(readOnly = true)
     public List<ServiceStatusSummaryDto> getCurrentStatuses() {
         return readRepository.findCurrentStatusPerService();
     }
 
-    @Transactional(readOnly = true)
     public List<ServiceStatusHistoryDto> getHistory(UUID serviceId) {
 
         // Validation

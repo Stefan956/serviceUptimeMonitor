@@ -7,6 +7,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "service_status",
+       indexes = @Index(name = "idx_service_status_service_id_checked_at",
+                        columnList = "monitored_service_id, checked_at"))
 @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
 public class ServiceStatus extends BaseEntity {
 

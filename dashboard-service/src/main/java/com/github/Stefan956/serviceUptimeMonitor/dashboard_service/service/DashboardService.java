@@ -9,7 +9,6 @@ import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.model.Service
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,9 +20,6 @@ public class DashboardService {
 
     public DashboardOverviewDto getOverview() {
         List<ServiceStatusSummaryDto> statuses = monitoringServiceClient.getCurrentStatuses();
-        if (statuses == null) {
-            statuses = Collections.emptyList();
-        }
 
         int total = statuses.size();
         int up = (int) statuses.stream()

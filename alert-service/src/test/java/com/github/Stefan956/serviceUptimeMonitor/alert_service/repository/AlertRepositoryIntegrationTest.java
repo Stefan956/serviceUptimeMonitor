@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +66,7 @@ class AlertRepositoryIntegrationTest {
         saveAlert("service-c", now);
 
         // When
-        List<Alert> result = alertRepository.findAllByOrderByNotifiedAtDesc();
+        List<Alert> result = alertRepository.findAllByOrderByNotifiedAtDesc(Pageable.unpaged()).getContent();
 
         // Then
         assertThat(result).hasSize(3);
@@ -73,13 +75,13 @@ class AlertRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("findAllByOrderByNotifiedAtDesc returns empty list when no alerts exist")
+    @DisplayName("findAllByOrderByNotifiedAtDesc returns empty page when no alerts exist")
     void findAllByOrderByNotifiedAtDesc_returnsEmptyWhenNoAlerts() {
         // When
-        List<Alert> result = alertRepository.findAllByOrderByNotifiedAtDesc();
+        Page<Alert> result = alertRepository.findAllByOrderByNotifiedAtDesc(Pageable.unpaged());
 
         // Then
-        assertThat(result).isEmpty();
+        assertThat(result.getContent()).isEmpty();
     }
 
     @Test
@@ -114,8 +116,8 @@ class AlertRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc returns the latest matching alert")
-    void findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc_returnsLatestMatch() {
+    @DisplayName("findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc returns the latest matching alert")
+    void findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc_returnsLatestMatch() {
         // Given
         LocalDateTime now = LocalDateTime.now();
         saveAlert("payment-service", now.minusMinutes(10));
@@ -123,8 +125,9 @@ class AlertRepositoryIntegrationTest {
         saveAlert("auth-service", now.minusMinutes(5));
 
         // When
-        Optional<Alert> result = alertRepository.findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                "payment-service", ServiceHealthStatus.DOWN);
+        Optional<Alert> result = alertRepository
+                .findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                        "payment-service", ServiceHealthStatus.DOWN, NotificationChannel.CONSOLE);
 
         // Then
         assertThat(result).isPresent();
@@ -132,14 +135,15 @@ class AlertRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc returns empty when no match")
-    void findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc_returnsEmptyWhenNoMatch() {
+    @DisplayName("findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc returns empty when no match")
+    void findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc_returnsEmptyWhenNoMatch() {
         // Given
         saveAlert("payment-service", LocalDateTime.now());
 
         // When
-        Optional<Alert> result = alertRepository.findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                "payment-service", ServiceHealthStatus.UP);
+        Optional<Alert> result = alertRepository
+                .findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                        "payment-service", ServiceHealthStatus.UP, NotificationChannel.CONSOLE);
 
         // Then
         assertThat(result).isEmpty();

@@ -175,6 +175,16 @@ The Monitoring Service exposes Prometheus metrics at `/actuator/prometheus`. Gra
 
 ---
 
+## Design Notes
+
+### SSE stream is polling-based
+
+`DashboardSseService` polls the Monitoring Service every 30 s and pushes the result to subscribers. Clients therefore see updates with up to 30 s latency, and the dashboard service makes one HTTP call per interval regardless of how many clients are connected.
+
+A production alternative would be to publish status-change events to a message broker (Kafka or RabbitMQ). The Dashboard Service would consume those events and push them immediately — zero polling overhead, instant fan-out to all SSE clients.
+
+---
+
 ## Testing
 
 ```bash

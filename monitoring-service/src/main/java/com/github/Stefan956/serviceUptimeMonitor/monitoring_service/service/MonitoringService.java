@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -29,36 +27,40 @@ public class MonitoringService {
     private final HealthCheckService healthCheckService;
     private final AlertServiceClient alertServiceClient;
 
-    // Tracks when each service was last checked (keyed by service UUID).
-    // On restart every service is checked immediately on the first scheduler tick.
-    private final Map<UUID, LocalDateTime> lastCheckedAt = new ConcurrentHashMap<>();
-
     public void checkAllServices() {
         List<MonitoredService> services = serviceRepository.findByEnabledTrue();
 
         log.info("Starting monitoring cycle for {} services", services.size());
 
-        for (MonitoredService service : services) {
-            if (isDue(service)) {
-                checkSingleService(service);
-            } else {
-                log.debug("Skipping service '{}' — not due yet", service.getName());
-            }
+        List<CompletableFuture<Void>> futures = services.stream()
+                .filter(service -> {
+                    if (!isDue(service)) {
+                        log.debug("Skipping service '{}' — not due yet", service.getName());
+                        return false;
+                    }
+                    return true;
+                })
+                .map(service -> CompletableFuture.runAsync(() -> checkSingleService(service)))
+                .toList();
+
+        if (!futures.isEmpty()) {
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         }
 
         log.info("Monitoring cycle finished");
     }
 
     private boolean isDue(MonitoredService service) {
-        LocalDateTime last = lastCheckedAt.get(service.getId());
-        if (last == null) {
+        if (service.getLastCheckedAt() == null) {
             return true;
         }
-        return Duration.between(last, LocalDateTime.now()).toSeconds() >= service.getCheckIntervalSeconds();
+        return Duration.between(service.getLastCheckedAt(), LocalDateTime.now()).toSeconds()
+                >= service.getCheckIntervalSeconds();
     }
 
     private void checkSingleService(MonitoredService service) {
-        lastCheckedAt.put(service.getId(), LocalDateTime.now());
+        service.setLastCheckedAt(LocalDateTime.now());
+        serviceRepository.save(service);
 
         HealthCheckService.Result result = healthCheckService.check(service.getUrl());
 

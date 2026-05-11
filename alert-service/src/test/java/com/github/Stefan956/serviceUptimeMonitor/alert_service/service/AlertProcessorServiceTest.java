@@ -13,6 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
@@ -55,8 +58,8 @@ class AlertProcessorServiceTest {
     void processStatusChange_shouldSaveAlertAndNotify_whenNotInCooldown() {
         // Given
         when(notificationService.getChannel()).thenReturn(NotificationChannel.CONSOLE);
-        when(alertRepository.findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                defaultRequest.serviceName(), defaultRequest.newStatus()))
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.CONSOLE))
                 .thenReturn(Optional.empty());
         when(alertRepository.save(any(Alert.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -79,12 +82,13 @@ class AlertProcessorServiceTest {
     }
 
     @Test
-    @DisplayName("Should skip notification when in cooldown period")
+    @DisplayName("Should skip notification when in cooldown period for that channel")
     void processStatusChange_shouldSkipNotification_whenInCooldown() {
         // Given
+        when(notificationService.getChannel()).thenReturn(NotificationChannel.CONSOLE);
         Alert recentAlert = createAlert("test-service", LocalDateTime.now().minusSeconds(30));
-        when(alertRepository.findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                defaultRequest.serviceName(), defaultRequest.newStatus()))
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.CONSOLE))
                 .thenReturn(Optional.of(recentAlert));
 
         // When
@@ -101,8 +105,8 @@ class AlertProcessorServiceTest {
         // Given
         when(notificationService.getChannel()).thenReturn(NotificationChannel.CONSOLE);
         Alert oldAlert = createAlert("test-service", LocalDateTime.now().minusMinutes(10));
-        when(alertRepository.findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                defaultRequest.serviceName(), defaultRequest.newStatus()))
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.CONSOLE))
                 .thenReturn(Optional.of(oldAlert));
         when(alertRepository.save(any(Alert.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -115,7 +119,38 @@ class AlertProcessorServiceTest {
     }
 
     @Test
-    @DisplayName("Should save alert for each notification service")
+    @DisplayName("Should check cooldown independently per channel")
+    void processStatusChange_shouldCheckCooldownPerChannel() {
+        // Given
+        when(notificationService.getChannel()).thenReturn(NotificationChannel.CONSOLE);
+        NotificationService emailService = mock(NotificationService.class);
+        when(emailService.getChannel()).thenReturn(NotificationChannel.EMAIL);
+
+        alertProcessorService = new AlertProcessorService(
+                alertRepository, List.of(notificationService, emailService));
+        ReflectionTestUtils.setField(alertProcessorService, "cooldownMs", 300000L);
+
+        // CONSOLE is in cooldown, EMAIL is not
+        Alert recentConsoleAlert = createAlert("test-service", LocalDateTime.now().minusSeconds(30));
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.CONSOLE))
+                .thenReturn(Optional.of(recentConsoleAlert));
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.EMAIL))
+                .thenReturn(Optional.empty());
+        when(alertRepository.save(any(Alert.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // When
+        alertProcessorService.processStatusChange(defaultRequest);
+
+        // Then — only EMAIL alert saved and notified; CONSOLE skipped
+        verify(alertRepository, times(1)).save(any(Alert.class));
+        verify(notificationService, never()).notify(any(Alert.class));
+        verify(emailService).notify(any(Alert.class));
+    }
+
+    @Test
+    @DisplayName("Should save alert for each notification service when not in cooldown")
     void processStatusChange_shouldSaveAlertForEachNotificationService() {
         // Given
         when(notificationService.getChannel()).thenReturn(NotificationChannel.CONSOLE);
@@ -126,8 +161,11 @@ class AlertProcessorServiceTest {
                 alertRepository, List.of(notificationService, emailService));
         ReflectionTestUtils.setField(alertProcessorService, "cooldownMs", 300000L);
 
-        when(alertRepository.findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                defaultRequest.serviceName(), defaultRequest.newStatus()))
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.CONSOLE))
+                .thenReturn(Optional.empty());
+        when(alertRepository.findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                defaultRequest.serviceName(), defaultRequest.newStatus(), NotificationChannel.EMAIL))
                 .thenReturn(Optional.empty());
         when(alertRepository.save(any(Alert.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -141,33 +179,34 @@ class AlertProcessorServiceTest {
     }
 
     @Test
-    @DisplayName("Should return all alerts mapped to DTOs")
-    void getAllAlerts_shouldReturnAllAlertsMappedToDto() {
+    @DisplayName("Should return paginated alerts mapped to DTOs")
+    void getAllAlerts_shouldReturnPaginatedAlertsMappedToDto() {
         // Given
         Alert alert1 = createAlert("service-1", LocalDateTime.now());
         Alert alert2 = createAlert("service-2", LocalDateTime.now());
-        when(alertRepository.findAllByOrderByNotifiedAtDesc()).thenReturn(List.of(alert1, alert2));
+        Page<Alert> page = new PageImpl<>(List.of(alert1, alert2));
+        when(alertRepository.findAllByOrderByNotifiedAtDesc(any(Pageable.class))).thenReturn(page);
 
         // When
-        List<AlertResponseDto> result = alertProcessorService.getAllAlerts();
+        Page<AlertResponseDto> result = alertProcessorService.getAllAlerts(Pageable.unpaged());
 
         // Then
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).serviceName()).isEqualTo("service-1");
-        assertThat(result.get(1).serviceName()).isEqualTo("service-2");
+        assertThat(result.getContent()).hasSize(2);
+        assertThat(result.getContent().get(0).serviceName()).isEqualTo("service-1");
+        assertThat(result.getContent().get(1).serviceName()).isEqualTo("service-2");
     }
 
     @Test
-    @DisplayName("Should return empty list when no alerts exist")
-    void getAllAlerts_shouldReturnEmptyList_whenNoAlerts() {
+    @DisplayName("Should return empty page when no alerts exist")
+    void getAllAlerts_shouldReturnEmptyPage_whenNoAlerts() {
         // Given
-        when(alertRepository.findAllByOrderByNotifiedAtDesc()).thenReturn(Collections.emptyList());
+        when(alertRepository.findAllByOrderByNotifiedAtDesc(any(Pageable.class))).thenReturn(Page.empty());
 
         // When
-        List<AlertResponseDto> result = alertProcessorService.getAllAlerts();
+        Page<AlertResponseDto> result = alertProcessorService.getAllAlerts(Pageable.unpaged());
 
         // Then
-        assertThat(result).isEmpty();
+        assertThat(result.getContent()).isEmpty();
     }
 
     @Test
