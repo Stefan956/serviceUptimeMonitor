@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @ConditionalOnProperty(name = "alert.console.enabled", havingValue = "true")
-public class  ConsoleAlertService implements NotificationService {
+public class ConsoleAlertService implements NotificationService {
 
     @Override
     public void notify(Alert alert) {

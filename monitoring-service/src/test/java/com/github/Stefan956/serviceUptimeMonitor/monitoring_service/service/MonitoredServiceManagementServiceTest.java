@@ -14,6 +14,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -93,8 +96,8 @@ class MonitoredServiceManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Should update an existing monitored service")
-    void update_shouldUpdateExistingService() {
+    @DisplayName("Should update an existing monitored service and clear its check timer for immediate re-check")
+    void update_shouldUpdateExistingServiceAndClearCheckTimer() {
         // Given
         MonitoredServiceRequestDto updateRequest = new MonitoredServiceRequestDto(
                 "Updated Service",
@@ -122,7 +125,7 @@ class MonitoredServiceManagementServiceTest {
         assertThat(testService.getName()).isEqualTo("Updated Service");
         assertThat(testService.getUrl()).isEqualTo("http://updated.com/health");
         assertThat(testService.getCheckIntervalSeconds()).isEqualTo(120);
-        assertThat(testService.getUpdatedAt()).isNotNull();
+        assertThat(testService.getLastCheckedAt()).isNull();
 
         assertThat(result.name()).isEqualTo("Updated Service");
         assertThat(result.url()).isEqualTo("http://updated.com/health");
@@ -194,25 +197,26 @@ class MonitoredServiceManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Should get all monitored services")
+    @DisplayName("Should get paginated list of all monitored services")
     void getAll_shouldReturnAllServices() {
         // Given
         MonitoredService service1 = createService("Service 1", "http://service1.com");
         MonitoredService service2 = createService("Service 2", "http://service2.com");
 
-        when(serviceRepository.findAll()).thenReturn(List.of(service1, service2));
+        Page<MonitoredService> page = new PageImpl<>(List.of(service1, service2));
+        when(serviceRepository.findAll(any(Pageable.class))).thenReturn(page);
         when(mapper.toResponseDto(service1)).thenReturn(new MonitoredServiceResponseDto(
                 service1.getId(), "Service 1", "http://service1.com", 60, true, service1.getCreatedAt(), null));
         when(mapper.toResponseDto(service2)).thenReturn(new MonitoredServiceResponseDto(
                 service2.getId(), "Service 2", "http://service2.com", 60, true, service2.getCreatedAt(), null));
 
         // When
-        List<MonitoredServiceResponseDto> result = managementService.getAll();
+        Page<MonitoredServiceResponseDto> result = managementService.getAll(Pageable.unpaged());
 
         // Then
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).name()).isEqualTo("Service 1");
-        assertThat(result.get(1).name()).isEqualTo("Service 2");
+        assertThat(result.getContent()).hasSize(2);
+        assertThat(result.getContent().get(0).name()).isEqualTo("Service 1");
+        assertThat(result.getContent().get(1).name()).isEqualTo("Service 2");
     }
 
     @Test
@@ -249,17 +253,16 @@ class MonitoredServiceManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Should return empty list when no services exist")
-    void getAll_shouldReturnEmptyList_whenNoServices() {
+    @DisplayName("Should return empty page when no services exist")
+    void getAll_shouldReturnEmptyPage_whenNoServices() {
         // Given
-        when(serviceRepository.findAll()).thenReturn(List.of());
-        // mapper not called when list is empty
+        when(serviceRepository.findAll(any(Pageable.class))).thenReturn(Page.empty());
 
         // When
-        List<MonitoredServiceResponseDto> result = managementService.getAll();
+        Page<MonitoredServiceResponseDto> result = managementService.getAll(Pageable.unpaged());
 
         // Then
-        assertThat(result).isEmpty();
+        assertThat(result.getContent()).isEmpty();
     }
 
     @Test

@@ -108,7 +108,7 @@ class AlertControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /api/alerts returns all alerts")
+    @DisplayName("GET /api/alerts returns all alerts as a page")
     void getAllAlerts_returnsAlerts() {
         // Given — seed via POST
         postAlert("service-a");
@@ -119,19 +119,21 @@ class AlertControllerIntegrationTest {
                 .uri("/api/alerts")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(AlertResponseDto[].class)
-                .value(body -> assertThat(body).hasSize(2));
+                .expectBody()
+                .jsonPath("$.content.length()").isEqualTo(2)
+                .jsonPath("$.totalElements").isEqualTo(2);
     }
 
     @Test
-    @DisplayName("GET /api/alerts returns empty list when no alerts exist")
+    @DisplayName("GET /api/alerts returns empty page when no alerts exist")
     void getAllAlerts_returnsEmptyWhenNoAlerts() {
         webTestClient.get()
                 .uri("/api/alerts")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(AlertResponseDto[].class)
-                .value(body -> assertThat(body).isEmpty());
+                .expectBody()
+                .jsonPath("$.content.length()").isEqualTo(0)
+                .jsonPath("$.empty").isEqualTo(true);
     }
 
     @Test

@@ -11,12 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,20 +51,21 @@ class AlertControllerTest {
     }
 
     @Test
-    @DisplayName("Should return all alerts from service")
+    @DisplayName("Should return paginated alerts from service")
     void getAllAlerts_shouldReturnServiceResult() {
         // Given
         AlertResponseDto dto1 = newResponseDto("svc-1");
         AlertResponseDto dto2 = newResponseDto("svc-2");
-        when(alertProcessorService.getAllAlerts()).thenReturn(List.of(dto1, dto2));
+        Page<AlertResponseDto> page = new PageImpl<>(List.of(dto1, dto2));
+        when(alertProcessorService.getAllAlerts(any(Pageable.class))).thenReturn(page);
 
         // When
-        List<AlertResponseDto> result = alertController.getAllAlerts();
+        Page<AlertResponseDto> result = alertController.getAllAlerts(Pageable.unpaged());
 
         // Then
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).serviceName()).isEqualTo("svc-1");
-        assertThat(result.get(1).serviceName()).isEqualTo("svc-2");
+        assertThat(result.getContent()).hasSize(2);
+        assertThat(result.getContent().get(0).serviceName()).isEqualTo("svc-1");
+        assertThat(result.getContent().get(1).serviceName()).isEqualTo("svc-2");
     }
 
     @Test

@@ -5,9 +5,12 @@ import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertRequestD
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertResponseDto;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.exception.AlertProcessingException;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.Alert;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.NotificationChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,25 +32,27 @@ public class AlertProcessorService {
 
     @Transactional
     public void processStatusChange(AlertRequestDto request) {
-        if (isInCooldown(request)) {
-            log.info("Alert for service '{}' with status {} is within cooldown period, skipping",
-                    request.serviceName(), request.newStatus());
-            return;
-        }
-
-        if (notificationServices == null || notificationServices.isEmpty()) {
+        if (notificationServices.isEmpty()) {
             log.warn("No notification services configured, skipping alert for service: {}", request.serviceName());
             return;
         }
 
         for (NotificationService notificationService : notificationServices) {
+            NotificationChannel channel = notificationService.getChannel();
+
+            if (isInCooldown(request, channel)) {
+                log.info("Alert for service '{}' with status {} via {} is within cooldown period, skipping",
+                        request.serviceName(), request.newStatus(), channel);
+                continue;
+            }
+
             Alert alert = new Alert();
             alert.setServiceName(request.serviceName());
             alert.setOldStatus(request.oldStatus());
             alert.setNewStatus(request.newStatus());
             alert.setHttpStatusCode(request.httpStatusCode());
             alert.setChangedAt(request.changedAt());
-            alert.setNotificationChannel(notificationService.getChannel());
+            alert.setNotificationChannel(channel);
 
             try {
                 alert = alertRepository.save(alert);
@@ -60,11 +65,9 @@ public class AlertProcessorService {
     }
 
     @Transactional(readOnly = true)
-    public List<AlertResponseDto> getAllAlerts() {
-        return alertRepository.findAllByOrderByNotifiedAtDesc()
-                .stream()
-                .map(this::toDto)
-                .toList();
+    public Page<AlertResponseDto> getAllAlerts(Pageable pageable) {
+        return alertRepository.findAllByOrderByNotifiedAtDesc(pageable)
+                .map(this::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -75,10 +78,10 @@ public class AlertProcessorService {
                 .toList();
     }
 
-    private boolean isInCooldown(AlertRequestDto request) {
+    private boolean isInCooldown(AlertRequestDto request, NotificationChannel channel) {
         Optional<Alert> lastAlert = alertRepository
-                .findTopByServiceNameAndNewStatusOrderByNotifiedAtDesc(
-                        request.serviceName(), request.newStatus());
+                .findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
+                        request.serviceName(), request.newStatus(), channel);
 
         if (lastAlert.isEmpty()) {
             return false;

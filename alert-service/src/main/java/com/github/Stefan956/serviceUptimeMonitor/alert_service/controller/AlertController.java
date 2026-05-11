@@ -12,6 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.*;
@@ -47,12 +51,13 @@ public class AlertController {
 
     @Operation(
             summary = "Get all alerts",
-            description = "Returns the complete alert history across all monitored services, ordered by notification time descending."
+            description = "Returns a paginated alert history across all monitored services, ordered by notification time descending."
     )
-    @ApiResponse(responseCode = "200", description = "Full alert history")
+    @ApiResponse(responseCode = "200", description = "Paginated alert history")
     @GetMapping
-    public List<AlertResponseDto> getAllAlerts() {
-        return alertProcessorService.getAllAlerts();
+    public Page<AlertResponseDto> getAllAlerts(
+            @PageableDefault(size = 50, sort = "notifiedAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return alertProcessorService.getAllAlerts(pageable);
     }
 
 

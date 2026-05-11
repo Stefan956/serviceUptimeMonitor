@@ -13,5 +13,3 @@ public record ServiceStatusChangeEvent(
         int httpStatusCode,
         LocalDateTime changedAt
 ) {}
-
-// Used by Alert Service to notify about status changes

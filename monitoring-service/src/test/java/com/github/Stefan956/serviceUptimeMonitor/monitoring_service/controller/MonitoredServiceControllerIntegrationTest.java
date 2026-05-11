@@ -157,7 +157,7 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /api/monitoring/services returns all services")
+    @DisplayName("GET /api/monitoring/services returns all services as a page")
     void getAll_returnsList() {
         MonitoredService second = new MonitoredService();
         second.setName("Second Service");
@@ -171,12 +171,13 @@ class MonitoredServiceControllerIntegrationTest {
                 .uri("/api/monitoring/services")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(MonitoredServiceResponseDto[].class)
-                .value(body -> assertThat(body).hasSize(2));
+                .expectBody()
+                .jsonPath("$.content.length()").isEqualTo(2)
+                .jsonPath("$.totalElements").isEqualTo(2);
     }
 
     @Test
-    @DisplayName("GET /api/monitoring/services returns empty list when no services exist")
+    @DisplayName("GET /api/monitoring/services returns empty page when no services exist")
     void getAll_returnsEmptyList() {
         repository.deleteAll();
 
@@ -184,8 +185,9 @@ class MonitoredServiceControllerIntegrationTest {
                 .uri("/api/monitoring/services")
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(MonitoredServiceResponseDto[].class)
-                .value(body -> assertThat(body).isEmpty());
+                .expectBody()
+                .jsonPath("$.content.length()").isEqualTo(0)
+                .jsonPath("$.totalElements").isEqualTo(0);
     }
 
     @Test

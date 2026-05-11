@@ -1,4 +1,3 @@
-//TODO: triggers a run of the monitoring logic every 30 seconds
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.scheduler;
 
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service.MonitoringService;

@@ -5,52 +5,36 @@ import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.Servic
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestClient;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withException;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withServerError;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("AlertServiceClient Unit Tests")
 class AlertServiceClientTest {
 
-    @Mock
-    private WebClient webClient;
-
-    @Mock
-    private WebClient.RequestBodyUriSpec requestBodyUriSpec;
-
-    @Mock
-    private WebClient.RequestBodySpec requestBodySpec;
-
-    @Mock
-    private WebClient.RequestHeadersSpec requestHeadersSpec;
-
-    @Mock
-    private WebClient.ResponseSpec responseSpec;
-
-    @InjectMocks
     private AlertServiceClient alertServiceClient;
-
+    private MockRestServiceServer mockServer;
     private ServiceStatusChangeEvent testEvent;
     private static final String ALERT_SERVICE_URL = "http://localhost:8081";
 
     @BeforeEach
     void setUp() {
-        // Set the alert service URL using reflection
+        RestClient.Builder builder = RestClient.builder();
+        mockServer = MockRestServiceServer.bindTo(builder).build();
+        RestClient restClient = builder.build();
+        alertServiceClient = new AlertServiceClient(restClient);
         ReflectionTestUtils.setField(alertServiceClient, "alertServiceUrl", ALERT_SERVICE_URL);
 
         testEvent = new ServiceStatusChangeEvent(
@@ -66,66 +50,41 @@ class AlertServiceClientTest {
     @Test
     @DisplayName("Should successfully send status change notification")
     void notifyStatusChange_shouldSendNotificationSuccessfully() {
-        // Given
-        mockSuccessfulWebClientCall();
+        mockServer.expect(requestTo(ALERT_SERVICE_URL + "/api/alerts/status-change"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK));
 
-        // When
         alertServiceClient.notifyStatusChange(testEvent);
 
-        // Then
-        verify(webClient).post();
-        verify(requestBodyUriSpec).uri(ALERT_SERVICE_URL + "/api/alerts/status-change");
-        verify(requestBodySpec).bodyValue(testEvent);
-        verify(responseSpec).toBodilessEntity();
+        mockServer.verify();
     }
 
     @Test
-    @DisplayName("Should handle WebClient exceptions gracefully")
-    void notifyStatusChange_shouldHandleWebClientException() {
-        // Given
-        when(webClient.post()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(any())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.toBodilessEntity())
-                .thenReturn(Mono.error(new WebClientResponseException(
-                        500,
-                        "Internal Server Error",
-                        null,
-                        null,
-                        null
-                )));
+    @DisplayName("Should handle server error gracefully")
+    void notifyStatusChange_shouldHandleServerError() {
+        mockServer.expect(requestTo(ALERT_SERVICE_URL + "/api/alerts/status-change"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withServerError());
 
-        // When
         alertServiceClient.notifyStatusChange(testEvent);
-
-        // Then - should not throw exception
-        verify(webClient).post();
     }
 
     @Test
-    @DisplayName("Should handle connection timeout gracefully")
-    void notifyStatusChange_shouldHandleConnectionTimeout() {
-        // Given
-        when(webClient.post()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(any())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.toBodilessEntity())
-                .thenReturn(Mono.error(new RuntimeException("Connection timeout")));
+    @DisplayName("Should handle connection exception gracefully")
+    void notifyStatusChange_shouldHandleConnectionException() {
+        mockServer.expect(requestTo(ALERT_SERVICE_URL + "/api/alerts/status-change"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withException(new IOException("Connection refused")));
 
-        // When
         alertServiceClient.notifyStatusChange(testEvent);
-
-        // Then - should not throw exception
-        verify(webClient).post();
     }
 
     @Test
     @DisplayName("Should send notification with correct event data")
     void notifyStatusChange_shouldSendCorrectEventData() {
-        // Given
-        mockSuccessfulWebClientCall();
+        mockServer.expect(requestTo(ALERT_SERVICE_URL + "/api/alerts/status-change"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.OK));
 
         ServiceStatusChangeEvent event = new ServiceStatusChangeEvent(
                 UUID.randomUUID(),
@@ -136,19 +95,8 @@ class AlertServiceClientTest {
                 LocalDateTime.now()
         );
 
-        // When
         alertServiceClient.notifyStatusChange(event);
 
-        // Then
-        verify(requestBodySpec).bodyValue(event);
-    }
-
-    // Helper method
-    private void mockSuccessfulWebClientCall() {
-        when(webClient.post()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
-        when(requestBodySpec.bodyValue(any())).thenReturn(requestHeadersSpec);
-        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.toBodilessEntity()).thenReturn(Mono.just(new ResponseEntity<>(HttpStatus.OK)));
+        mockServer.verify();
     }
 }

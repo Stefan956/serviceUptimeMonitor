@@ -14,7 +14,7 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name="service_id", updatable = false, nullable = false)
+    @Column(name="id", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name="created_at" ,updatable = false)
@@ -22,4 +22,16 @@ public class BaseEntity {
 
     @Column(name="updated_at" ,insertable = false)
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    void prePersist() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

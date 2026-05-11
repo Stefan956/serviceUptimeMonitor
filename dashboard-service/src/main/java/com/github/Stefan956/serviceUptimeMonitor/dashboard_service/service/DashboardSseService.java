@@ -34,6 +34,10 @@ public class DashboardSseService {
         return emitter;
     }
 
+    // Polling-based SSE: fetches a snapshot from monitoring-service every
+    // ${dashboard.polling.interval-ms} ms and pushes it to all connected clients.
+    // Push frequency is bounded by the polling interval, not by real-time events.
+    // A production alternative: subscribe to a message broker (Kafka/RabbitMQ) and push on each status-change event.
     @Scheduled(fixedDelayString = "${dashboard.polling.interval-ms}")
     public void pollAndBroadcast() {
         if (emitters.isEmpty()) {
