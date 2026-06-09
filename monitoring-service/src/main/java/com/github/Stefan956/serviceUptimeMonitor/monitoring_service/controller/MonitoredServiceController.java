@@ -1,8 +1,9 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.controller;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceRequestDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceResponseDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.request.MonitoredServiceRequestDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.MonitoredServiceResponseDto;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service.MonitoredServiceManagementService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.util.Constants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/monitoring")
+@RequestMapping(Constants.API_MONITORING_READ_BASE)
 @RequiredArgsConstructor
 @Tag(name = "Monitored Services Management", description = "CRUD operations for registering and configuring services to monitor")
 public class MonitoredServiceController {

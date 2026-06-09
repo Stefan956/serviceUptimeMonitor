@@ -3,6 +3,7 @@ package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.client;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.MonitoredServiceDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusHistoryDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.util.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,39 +24,39 @@ public class MonitoringServiceClient {
     public List<ServiceStatusSummaryDto> getCurrentStatuses() {
         log.debug("Fetching current statuses from monitoring-service");
         return monitoringWebClient.get()
-                .uri("/api/monitoring/read/current-statuses")
+                .uri(Constants.MONITORING_SERVICE_CURRENT_STATUSES)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ServiceStatusSummaryDto>>() {})
                 .defaultIfEmpty(List.of())
-                .block(Duration.ofSeconds(5));
+                .block(Constants.DEFAULT_TIMEOUT);
     }
 
     public List<ServiceStatusHistoryDto> getServiceHistory(UUID serviceId) {
         log.debug("Fetching history for service {} from monitoring-service", serviceId);
         return monitoringWebClient.get()
-                .uri("/api/monitoring/read/history/{serviceId}", serviceId)
+                .uri(Constants.MONITORING_SERVICE_HISTORY, serviceId)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<ServiceStatusHistoryDto>>() {})
                 .defaultIfEmpty(List.of())
-                .block(Duration.ofSeconds(5));
+                .block(Constants.DEFAULT_TIMEOUT);
     }
 
     public List<MonitoredServiceDto> getAllServices() {
         log.debug("Fetching all services from monitoring-service");
         return monitoringWebClient.get()
-                .uri("/api/monitoring/services")
+                .uri(Constants.MONITORING_SERVICES_ALL_SERVICES)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<MonitoredServiceDto>>() {})
                 .defaultIfEmpty(List.of())
-                .block(Duration.ofSeconds(5));
+                .block(Constants.DEFAULT_TIMEOUT);
     }
 
     public MonitoredServiceDto getServiceById(UUID id) {
         log.debug("Fetching service {} from monitoring-service", id);
         return monitoringWebClient.get()
-                .uri("/api/monitoring/services/{id}", id)
+                .uri(Constants.MONITORING_SERVICES_FETCHED_SERVICES_BY_ID, id)
                 .retrieve()
                 .bodyToMono(MonitoredServiceDto.class)
-                .block(Duration.ofSeconds(5));
+                .block(Constants.DEFAULT_TIMEOUT);
     }
 }

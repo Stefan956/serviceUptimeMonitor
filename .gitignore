@@ -4,6 +4,10 @@ target/
 *.war
 *.ear
 
+alert-service/target
+monitoring-service/target
+dashboard-service/target
+
 # ── IntelliJ IDEA ─────────────────────────────────────────────────────────────
 .idea/
 *.iml

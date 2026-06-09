@@ -59,7 +59,7 @@ spring:
 management:
   health:
     mail:
-      enabled: false
+      enabled: true
 
 server:
   port: 8082
@@ -120,7 +120,7 @@ server:
 
 alert:
   email:
-    enabled: false
+    enabled: false  #${ALERT_EMAIL_ENABLED:false}
     from: alerts@uptime.local
     to: admin@uptime.local
   console:

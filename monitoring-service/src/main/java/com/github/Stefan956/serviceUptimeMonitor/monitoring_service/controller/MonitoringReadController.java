@@ -1,8 +1,9 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.controller;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusHistoryDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.ServiceStatusHistoryDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.ServiceStatusSummaryDto;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service.MonitoringReadService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.util.Constants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/monitoring/read")
+@RequestMapping(Constants.API_MONITORING_READ_BASE)
 @RequiredArgsConstructor
 @Tag(name = "Monitoring Read", description = "Read-only endpoints consumed by the Dashboard Service, Alert Service, and Grafana")
 public class MonitoringReadController {

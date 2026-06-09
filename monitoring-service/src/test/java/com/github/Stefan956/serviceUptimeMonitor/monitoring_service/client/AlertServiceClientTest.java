@@ -1,7 +1,7 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.client;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeEvent;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.event.ServiceStatusChangeEvent;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.enums.ServiceHealthStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -3,7 +3,7 @@ package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.client;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.MonitoredServiceDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusHistoryDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusSummaryDto;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.enums.ServiceHealthStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

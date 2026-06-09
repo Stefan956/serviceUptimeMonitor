@@ -1,6 +1,6 @@
 package com.github.Stefan956.serviceUptimeMonitor.alert_service.dto;
 
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

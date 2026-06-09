@@ -1,7 +1,7 @@
 package com.github.Stefan956.serviceUptimeMonitor.alert_service.service;
 
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.Alert;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.NotificationChannel;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

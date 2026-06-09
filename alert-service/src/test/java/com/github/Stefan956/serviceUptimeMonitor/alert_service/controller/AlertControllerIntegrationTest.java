@@ -3,7 +3,7 @@ package com.github.Stefan956.serviceUptimeMonitor.alert_service.controller;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dao.AlertRepository;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertRequestDto;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertResponseDto;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

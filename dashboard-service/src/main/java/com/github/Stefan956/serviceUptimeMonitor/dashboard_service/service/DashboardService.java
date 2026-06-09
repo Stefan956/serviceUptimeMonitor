@@ -5,7 +5,7 @@ import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.Dashboard
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.MonitoredServiceDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusHistoryDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusSummaryDto;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.enums.ServiceHealthStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
