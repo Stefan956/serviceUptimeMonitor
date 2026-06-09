@@ -53,14 +53,14 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/monitoring/services creates a new service and returns 201")
+    @DisplayName("POST /api/monitoring/read/services creates a new service and returns 201")
     void create_returnsCreatedService() {
         MonitoredServiceRequestDto request = new MonitoredServiceRequestDto(
                 "New Service", "http://new.com/health", 30
         );
 
         webTestClient.post()
-                .uri("/api/monitoring/services")
+                .uri("/api/monitoring/read/services")
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isCreated()
@@ -77,14 +77,14 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("PUT /api/monitoring/services/{id} updates an existing service")
+    @DisplayName("PUT /api/monitoring/read/services/{id} updates an existing service")
     void update_returnsUpdatedService() {
         MonitoredServiceRequestDto request = new MonitoredServiceRequestDto(
                 "Updated Name", "http://updated.com/health", 120
         );
 
         webTestClient.put()
-                .uri("/api/monitoring/services/" + existingService.getId())
+                .uri("/api/monitoring/read/services/" + existingService.getId())
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isOk()
@@ -97,45 +97,45 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("PUT /api/monitoring/services/{id} with non-existent ID returns 404")
+    @DisplayName("PUT /api/monitoring/read/services/{id} with non-existent ID returns 404")
     void update_nonExistentId_returnsNotFound() {
         MonitoredServiceRequestDto request = new MonitoredServiceRequestDto(
                 "Updated", "http://updated.com/health", 60
         );
 
         webTestClient.put()
-                .uri("/api/monitoring/services/" + UUID.randomUUID())
+                .uri("/api/monitoring/read/services/" + UUID.randomUUID())
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
-    @DisplayName("PATCH /api/monitoring/services/{id}/enable returns 204")
+    @DisplayName("PATCH /api/monitoring/read/services/{id}/enable returns 204")
     void enable_returnsNoContent() {
         existingService.setEnabled(false);
         repository.save(existingService);
 
         webTestClient.patch()
-                .uri("/api/monitoring/services/" + existingService.getId() + "/enable")
+                .uri("/api/monitoring/read/services/" + existingService.getId() + "/enable")
                 .exchange()
                 .expectStatus().isNoContent();
     }
 
     @Test
-    @DisplayName("PATCH /api/monitoring/services/{id}/disable returns 204")
+    @DisplayName("PATCH /api/monitoring/read/services/{id}/disable returns 204")
     void disable_returnsNoContent() {
         webTestClient.patch()
-                .uri("/api/monitoring/services/" + existingService.getId() + "/disable")
+                .uri("/api/monitoring/read/services/" + existingService.getId() + "/disable")
                 .exchange()
                 .expectStatus().isNoContent();
     }
 
     @Test
-    @DisplayName("GET /api/monitoring/services/{id} returns the service")
+    @DisplayName("GET /api/monitoring/read/services/{id} returns the service")
     void getById_returnsService() {
         webTestClient.get()
-                .uri("/api/monitoring/services/" + existingService.getId())
+                .uri("/api/monitoring/read/services/" + existingService.getId())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(MonitoredServiceResponseDto.class)
@@ -148,16 +148,16 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /api/monitoring/services/{id} with non-existent ID returns 404")
+    @DisplayName("GET /api/monitoring/read/services/{id} with non-existent ID returns 404")
     void getById_nonExistentId_returnsNotFound() {
         webTestClient.get()
-                .uri("/api/monitoring/services/" + UUID.randomUUID())
+                .uri("/api/monitoring/read/services/" + UUID.randomUUID())
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
-    @DisplayName("GET /api/monitoring/services returns all services as a page")
+    @DisplayName("GET /api/monitoring/read/services returns all services as a page")
     void getAll_returnsList() {
         MonitoredService second = new MonitoredService();
         second.setName("Second Service");
@@ -168,7 +168,7 @@ class MonitoredServiceControllerIntegrationTest {
         repository.save(second);
 
         webTestClient.get()
-                .uri("/api/monitoring/services")
+                .uri("/api/monitoring/read/services")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -177,12 +177,12 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /api/monitoring/services returns empty page when no services exist")
+    @DisplayName("GET /api/monitoring/read/services returns empty page when no services exist")
     void getAll_returnsEmptyList() {
         repository.deleteAll();
 
         webTestClient.get()
-                .uri("/api/monitoring/services")
+                .uri("/api/monitoring/read/services")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -191,10 +191,10 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("DELETE /api/monitoring/services/{id} removes the service and returns 204")
+    @DisplayName("DELETE /api/monitoring/read/services/{id} removes the service and returns 204")
     void delete_returnsNoContent() {
         webTestClient.delete()
-                .uri("/api/monitoring/services/" + existingService.getId())
+                .uri("/api/monitoring/read/services/" + existingService.getId())
                 .exchange()
                 .expectStatus().isNoContent();
 
@@ -202,23 +202,23 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("DELETE /api/monitoring/services/{id} with non-existent ID returns 404")
+    @DisplayName("DELETE /api/monitoring/read/services/{id} with non-existent ID returns 404")
     void delete_nonExistentId_returnsNotFound() {
         webTestClient.delete()
-                .uri("/api/monitoring/services/" + UUID.randomUUID())
+                .uri("/api/monitoring/read/services/" + UUID.randomUUID())
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
-    @DisplayName("POST /api/monitoring/services with blank name returns 400 with field errors")
+    @DisplayName("POST /api/monitoring/read/services with blank name returns 400 with field errors")
     void create_blankName_returns400WithErrors() {
         MonitoredServiceRequestDto invalid = new MonitoredServiceRequestDto(
                 "", "http://valid.com/health", 30
         );
 
         webTestClient.post()
-                .uri("/api/monitoring/services")
+                .uri("/api/monitoring/read/services")
                 .bodyValue(invalid)
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -228,14 +228,14 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/monitoring/services with invalid URL returns 400 with field errors")
+    @DisplayName("POST /api/monitoring/read/services with invalid URL returns 400 with field errors")
     void create_invalidUrl_returns400WithErrors() {
         MonitoredServiceRequestDto invalid = new MonitoredServiceRequestDto(
                 "My Service", "not-a-url", 30
         );
 
         webTestClient.post()
-                .uri("/api/monitoring/services")
+                .uri("/api/monitoring/read/services")
                 .bodyValue(invalid)
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -245,14 +245,14 @@ class MonitoredServiceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/monitoring/services with checkIntervalSeconds below minimum returns 400")
+    @DisplayName("POST /api/monitoring/read/services with checkIntervalSeconds below minimum returns 400")
     void create_intervalBelowMinimum_returns400WithErrors() {
         MonitoredServiceRequestDto invalid = new MonitoredServiceRequestDto(
                 "My Service", "http://valid.com/health", 1
         );
 
         webTestClient.post()
-                .uri("/api/monitoring/services")
+                .uri("/api/monitoring/read/services")
                 .bodyValue(invalid)
                 .exchange()
                 .expectStatus().isBadRequest()
