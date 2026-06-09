@@ -113,7 +113,7 @@ spring:
 management:
   health:
     mail:
-      enabled: false
+      enabled: true
 
 server:
   port: 8080

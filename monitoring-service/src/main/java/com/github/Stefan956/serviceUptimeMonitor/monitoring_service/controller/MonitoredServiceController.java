@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(Constants.API_MONITORING_READ_BASE)
+@RequestMapping(Constants.API_MONITORING_BASE)
 @RequiredArgsConstructor
 @Tag(name = "Monitored Services Management", description = "CRUD operations for registering and configuring services to monitor")
 public class MonitoredServiceController {
