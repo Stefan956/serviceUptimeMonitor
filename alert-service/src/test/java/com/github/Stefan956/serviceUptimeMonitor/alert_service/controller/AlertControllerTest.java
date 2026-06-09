@@ -2,8 +2,8 @@ package com.github.Stefan956.serviceUptimeMonitor.alert_service.controller;
 
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertRequestDto;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertResponseDto;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.NotificationChannel;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.service.AlertProcessorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

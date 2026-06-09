@@ -1,5 +1,5 @@
 //Defines what is monitored
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "url"))
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Data @ToString @AllArgsConstructor @NoArgsConstructor
 public class MonitoredService extends BaseEntity {
 
     @Column(name="name", nullable = false)

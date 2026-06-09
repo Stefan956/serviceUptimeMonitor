@@ -1,6 +1,6 @@
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.MonitoredService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

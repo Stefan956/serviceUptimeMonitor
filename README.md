@@ -145,7 +145,7 @@ Full interactive docs are available via Swagger UI when the services are running
 | `PATCH` | `/api/monitoring/services/{id}/enable` | Resume health checks |
 | `PATCH` | `/api/monitoring/services/{id}/disable` | Pause health checks |
 | `DELETE` | `/api/monitoring/services/{id}` | Remove a service and its history |
-| `GET` | `/api/monitoring/read/current-statuses` | Latest check result per service |
+| `GET` | `/api/monitoring/read/current-statuses` | Latest check serviceHealthStatusResult per service |
 | `GET` | `/api/monitoring/read/history/{serviceId}` | Full check history for a service |
 | `GET` | `/actuator/prometheus` | Prometheus metrics |
 
@@ -179,7 +179,7 @@ The Monitoring Service exposes Prometheus metrics at `/actuator/prometheus`. Gra
 
 ### SSE stream is polling-based
 
-`DashboardSseService` polls the Monitoring Service every 30 s and pushes the result to subscribers. Clients therefore see updates with up to 30 s latency, and the dashboard service makes one HTTP call per interval regardless of how many clients are connected.
+`DashboardSseService` polls the Monitoring Service every 30 s and pushes the serviceHealthStatusResult to subscribers. Clients therefore see updates with up to 30 s latency, and the dashboard service makes one HTTP call per interval regardless of how many clients are connected.
 
 A production alternative would be to publish status-change events to a message broker (Kafka or RabbitMQ). The Dashboard Service would consume those events and push them immediately — zero polling overhead, instant fan-out to all SSE clients.
 

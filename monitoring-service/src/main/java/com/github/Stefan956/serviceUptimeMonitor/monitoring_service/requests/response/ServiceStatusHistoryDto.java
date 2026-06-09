@@ -1,8 +1,8 @@
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response;
 
 // Used by Grafana to show historical status of each service
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.enums.ServiceHealthStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;

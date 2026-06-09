@@ -1,12 +1,12 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.client.AlertServiceClient;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeEvent;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.MonitoredServiceRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.ServiceStatusRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.event.ServiceStatusChangeEvent;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.enums.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.ServiceStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -109,7 +109,7 @@ class MonitoringServiceTest {
         when(statusRepository.findTopByMonitoredServiceOrderByCheckedAtDesc(testService))
                 .thenReturn(Optional.empty());
         when(healthCheckService.check(testService.getUrl()))
-                .thenReturn(new HealthCheckService.Result(ServiceHealthStatus.DOWN, 0, 0L));
+                .thenReturn(new HealthCheckService.ServiceHealthStatusResult(ServiceHealthStatus.DOWN, 0, 0L));
 
         ArgumentCaptor<ServiceStatus> statusCaptor = ArgumentCaptor.forClass(ServiceStatus.class);
 
@@ -138,7 +138,7 @@ class MonitoringServiceTest {
         when(statusRepository.findTopByMonitoredServiceOrderByCheckedAtDesc(testService))
                 .thenReturn(Optional.of(previousStatus));
         when(healthCheckService.check(testService.getUrl()))
-                .thenReturn(new HealthCheckService.Result(ServiceHealthStatus.DOWN, 0, 0L));
+                .thenReturn(new HealthCheckService.ServiceHealthStatusResult(ServiceHealthStatus.DOWN, 0, 0L));
 
         ArgumentCaptor<ServiceStatusChangeEvent> eventCaptor = ArgumentCaptor.forClass(ServiceStatusChangeEvent.class);
 
@@ -241,7 +241,7 @@ class MonitoringServiceTest {
     // Helper methods
     private void mockSuccessfulHealthCheck() {
         when(healthCheckService.check(anyString()))
-                .thenReturn(new HealthCheckService.Result(ServiceHealthStatus.UP, 200, 100L));
+                .thenReturn(new HealthCheckService.ServiceHealthStatusResult(ServiceHealthStatus.UP, 200, 100L));
     }
 
     private MonitoredService createService(String name, String url) {

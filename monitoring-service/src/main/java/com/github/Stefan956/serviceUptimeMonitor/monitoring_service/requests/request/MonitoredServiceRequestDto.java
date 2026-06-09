@@ -1,4 +1,4 @@
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;

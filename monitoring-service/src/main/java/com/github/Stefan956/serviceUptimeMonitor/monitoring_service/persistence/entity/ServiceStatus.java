@@ -1,6 +1,7 @@
 // Records what happened during the Monitoring
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity;
 
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.enums.ServiceHealthStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "service_status",
        indexes = @Index(name = "idx_service_status_service_id_checked_at",
                         columnList = "monitored_service_id, checked_at"))
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Data @ToString @AllArgsConstructor @NoArgsConstructor
 public class ServiceStatus extends BaseEntity {
 
     @ManyToOne

@@ -1,9 +1,9 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.controller;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceRequestDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceResponseDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.MonitoredServiceRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.request.MonitoredServiceRequestDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.MonitoredServiceResponseDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.MonitoredService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

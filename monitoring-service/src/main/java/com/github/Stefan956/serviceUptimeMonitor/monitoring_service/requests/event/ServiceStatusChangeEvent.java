@@ -1,6 +1,6 @@
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.event;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.enums.ServiceHealthStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

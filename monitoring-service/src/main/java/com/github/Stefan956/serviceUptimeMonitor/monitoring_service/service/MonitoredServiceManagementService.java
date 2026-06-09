@@ -1,10 +1,11 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceRequestDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.MonitoredServiceResponseDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.MonitoredServiceRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.request.MonitoredServiceRequestDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.MonitoredServiceResponseDto;
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.mapper.MonitoredServiceMapper;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.util.Constants;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -61,6 +62,6 @@ public class MonitoredServiceManagementService {
 
     private MonitoredService findEntity(UUID serviceId) {
         return serviceRepository.findById(serviceId)
-                .orElseThrow(() -> new EntityNotFoundException("Service not found: " + serviceId));
+                .orElseThrow(() -> new EntityNotFoundException(Constants.SERVICE_NOT_FOUND_PREFIX + serviceId));
     }
 }

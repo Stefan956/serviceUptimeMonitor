@@ -5,7 +5,7 @@ import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertRequestD
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertResponseDto;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.exception.AlertProcessingException;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.Alert;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.NotificationChannel;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,12 +83,11 @@ public class AlertProcessorService {
                 .findTopByServiceNameAndNewStatusAndNotificationChannelOrderByNotifiedAtDesc(
                         request.serviceName(), request.newStatus(), channel);
 
-        if (lastAlert.isEmpty()) {
-            return false;
+        if (!lastAlert.isEmpty()) {
+            return Duration.between(lastAlert.get().getNotifiedAt(), LocalDateTime.now()).toMillis() < cooldownMs;
         }
 
-        Duration elapsed = Duration.between(lastAlert.get().getNotifiedAt(), LocalDateTime.now());
-        return elapsed.toMillis() < cooldownMs;
+        return false;
     }
 
     private AlertResponseDto toDto(Alert alert) {

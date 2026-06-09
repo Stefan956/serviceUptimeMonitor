@@ -1,15 +1,15 @@
-package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model;
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
-@Getter @Setter @ToString
+@Data
+@ToString
 public class BaseEntity {
 
     @Id

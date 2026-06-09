@@ -1,12 +1,11 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
 import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.client.AlertServiceClient;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeEvent;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.MonitoredService;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.MonitoredServiceRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.ServiceStatusRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.event.ServiceStatusChangeEvent;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.MonitoredService;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.ServiceStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,56 +43,57 @@ public class MonitoringService {
                 .toList();
 
         if (!futures.isEmpty()) {
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            CompletableFuture.allOf(futures
+                    .toArray(CompletableFuture[]::new))
+                    .join();
         }
 
         log.info("Monitoring cycle finished");
     }
 
     private boolean isDue(MonitoredService service) {
-        if (service.getLastCheckedAt() == null) {
-            return true;
+        if (service.getLastCheckedAt() != null) {
+            return Duration.between(service.getLastCheckedAt(), LocalDateTime.now()).toSeconds() >= service.getCheckIntervalSeconds();
         }
-        return Duration.between(service.getLastCheckedAt(), LocalDateTime.now()).toSeconds()
-                >= service.getCheckIntervalSeconds();
+        return true;
     }
 
     private void checkSingleService(MonitoredService service) {
         service.setLastCheckedAt(LocalDateTime.now());
         serviceRepository.save(service);
 
-        HealthCheckService.Result result = healthCheckService.check(service.getUrl());
+        HealthCheckService.ServiceHealthStatusResult serviceHealthStatusResult = healthCheckService.check(service.getUrl());
 
         log.debug("Service '{}' is {} ({} ms)",
-                service.getName(), result.status(), result.responseTimeMs());
+                service.getName(), serviceHealthStatusResult.status(), serviceHealthStatusResult.responseTimeMs());
 
-        saveStatus(service, result);
+        saveStatus(service, serviceHealthStatusResult);
     }
 
-    private void saveStatus(MonitoredService service, HealthCheckService.Result result) {
+    private void saveStatus(MonitoredService service, HealthCheckService.ServiceHealthStatusResult serviceHealthStatusResult) {
         Optional<ServiceStatus> lastStatus =
                 statusRepository.findTopByMonitoredServiceOrderByCheckedAtDesc(service);
 
         ServiceStatus status = new ServiceStatus();
         status.setMonitoredService(service);
-        status.setStatus(result.status());
-        status.setHttpStatusCode(result.httpStatusCode());
-        status.setResponseTimeMs(result.responseTimeMs());
+        status.setStatus(serviceHealthStatusResult.status());
+        status.setHttpStatusCode(serviceHealthStatusResult.httpStatusCode());
+        status.setResponseTimeMs(serviceHealthStatusResult.responseTimeMs());
         status.setCheckedAt(LocalDateTime.now());
 
         statusRepository.save(status);
 
-        if (lastStatus.isPresent() && lastStatus.get().getStatus() != result.status()) {
+        if (lastStatus.isPresent() && lastStatus.get().getStatus() != serviceHealthStatusResult.status()) {
             log.info("Service '{}' changed status from {} to {}",
-                    service.getName(), lastStatus.get().getStatus(), result.status());
+                    service.getName(), lastStatus.get().getStatus(), serviceHealthStatusResult.status());
 
             alertServiceClient.notifyStatusChange(
                     new ServiceStatusChangeEvent(
                             service.getId(),
                             service.getName(),
                             lastStatus.get().getStatus(),
-                            result.status(),
-                            result.httpStatusCode(),
+                            serviceHealthStatusResult.status(),
+                            serviceHealthStatusResult.httpStatusCode(),
                             LocalDateTime.now()
                     )
             );
