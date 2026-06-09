@@ -1,0 +1,37 @@
+package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@MappedSuperclass
+@Data
+@ToString
+public class BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name="id", updatable = false, nullable = false)
+    private UUID id;
+
+    @Column(name="created_at" ,updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name="updated_at" ,insertable = false)
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    void prePersist() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+}
