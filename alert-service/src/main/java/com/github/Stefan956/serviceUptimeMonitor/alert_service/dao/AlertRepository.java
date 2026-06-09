@@ -1,8 +1,8 @@
 package com.github.Stefan956.serviceUptimeMonitor.alert_service.dao;
 
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.Alert;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.NotificationChannel;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

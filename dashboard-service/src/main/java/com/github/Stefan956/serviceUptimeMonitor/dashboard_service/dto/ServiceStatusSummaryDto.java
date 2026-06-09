@@ -1,6 +1,6 @@
 package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto;
 
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.enums.ServiceHealthStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;

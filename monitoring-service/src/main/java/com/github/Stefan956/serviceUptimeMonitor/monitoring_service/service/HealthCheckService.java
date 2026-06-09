@@ -1,6 +1,6 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceHealthStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.enums.ServiceHealthStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,9 @@ public class HealthCheckService {
 
     private final RestClient restClient;
 
-    public record Result(ServiceHealthStatus status, int httpStatusCode, long responseTimeMs) {}
+    public record ServiceHealthStatusResult(ServiceHealthStatus status, int httpStatusCode, long responseTimeMs) {}
 
-    public Result check(String url) {
+    public ServiceHealthStatusResult check(String url) {
         long start = System.currentTimeMillis();
         try {
             var response = restClient.get()
@@ -24,12 +24,12 @@ public class HealthCheckService {
                     .toBodilessEntity();
 
             long responseTimeMs = System.currentTimeMillis() - start;
-            return new Result(ServiceHealthStatus.UP, response.getStatusCode().value(), responseTimeMs);
+            return new ServiceHealthStatusResult(ServiceHealthStatus.UP, response.getStatusCode().value(), responseTimeMs);
 
         } catch (Exception e) {
             long responseTimeMs = System.currentTimeMillis() - start;
             log.warn("Health check failed for {}: {}", url, e.getMessage());
-            return new Result(ServiceHealthStatus.DOWN, 0, responseTimeMs);
+            return new ServiceHealthStatusResult(ServiceHealthStatus.DOWN, 0, responseTimeMs);
         }
     }
 }

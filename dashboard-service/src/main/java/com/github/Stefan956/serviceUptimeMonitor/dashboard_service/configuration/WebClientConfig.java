@@ -1,5 +1,6 @@
 package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.configuration;
 
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.util.Constants;
 import io.netty.channel.ChannelOption;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ public class WebClientConfig {
     public WebClient monitoringWebClient() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-                .responseTimeout(Duration.ofSeconds(5));
+                .responseTimeout(Constants.DEFAULT_TIMEOUT);
         return WebClient.builder()
                 .baseUrl(monitoringServiceUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))

@@ -115,6 +115,11 @@ services:
         condition: service_healthy
     restart: on-failure
 
+  demo-service:
+    build: ./demo-service
+    container_name: uptime-demo
+    restart: on-failure
+
 volumes:
   postgres_data:
   prometheus_data:

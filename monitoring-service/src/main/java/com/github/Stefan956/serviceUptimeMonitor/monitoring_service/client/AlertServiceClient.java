@@ -1,6 +1,7 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.client;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusChangeEvent;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.event.ServiceStatusChangeEvent;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.util.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,7 @@ public class AlertServiceClient {
     public void notifyStatusChange(ServiceStatusChangeEvent statusChange) {
         try {
             restClient.post()
-                    .uri(alertServiceUrl + "/api/alerts/status-change")
+                    .uri(alertServiceUrl + Constants.ALERT_STATUS_CHANGE_PATH)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(statusChange)
                     .retrieve()

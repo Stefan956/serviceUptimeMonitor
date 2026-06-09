@@ -1,17 +1,17 @@
 package com.github.Stefan956.serviceUptimeMonitor.alert_service.model;
 
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "alerts")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Alert {
 

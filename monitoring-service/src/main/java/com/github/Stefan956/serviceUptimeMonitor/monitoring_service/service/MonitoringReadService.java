@@ -1,11 +1,12 @@
 package com.github.Stefan956.serviceUptimeMonitor.monitoring_service.service;
 
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoredServiceRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.MonitoringReadRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dao.ServiceStatusRepository;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusHistoryDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.dto.ServiceStatusSummaryDto;
-import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.model.ServiceStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.MonitoredServiceRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.MonitoringReadRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.repository.ServiceStatusRepository;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.ServiceStatusHistoryDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.requests.response.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.persistence.entity.ServiceStatus;
+import com.github.Stefan956.serviceUptimeMonitor.monitoring_service.util.Constants;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class MonitoringReadService {
         // Validation
         if (!monitoredServiceRepository.existsById(serviceId)) {
             throw new EntityNotFoundException(
-                    "Service not found: " + serviceId
+                    Constants.SERVICE_NOT_FOUND_PREFIX + serviceId
             );
         }
 
