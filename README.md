@@ -10,7 +10,7 @@ A microservices application that health-checks registered HTTP services, fires e
 
 | Layer | Technology |
 |---|---|
-| Language | Java 21 |
+| Language | Java 21 · Go 1.24 |
 | Framework | Spring Boot 4.0.1 |
 | HTTP client | Spring WebFlux (`WebClient`) |
 | Persistence | Spring Data JPA · PostgreSQL (prod) · H2 (dev/test) |
@@ -21,15 +21,18 @@ A microservices application that health-checks registered HTTP services, fires e
 | API Docs | SpringDoc OpenAPI (Swagger UI) |
 | Testing | JUnit 5 · Mockito · Spring Boot Test |
 | Containers | Docker · Docker Compose |
-| Observability | Prometheus · Grafana |
+| Observability | Prometheus · Grafana (pre-provisioned dashboard) |
 
 ---
 
 ## Architecture
 
 ```
- External Services (any HTTP endpoint)
-         │  health checks (HTTP GET every N seconds)
+ ┌───────────────────┐
+ │  Demo Service     │  simulates HEALTHY → DEGRADED → DOWN → RECOVERING cycle
+ │  (Go)             │
+ └───────────────────┘
+         │  health checks (HTTP GET every 30 s)
          ▼
  ┌───────────────────┐        POST /api/alerts/status-change
  │  Monitoring       │ ─────────────────────────────────────▶  ┌─────────────────┐
@@ -62,6 +65,7 @@ A microservices application that health-checks registered HTTP services, fires e
 | **Monitoring Service** | Registers services, runs health checks, persists results, sends status-change events to the Alert Service, exposes Prometheus metrics |
 | **Alert Service** | Receives status-change events, sends email notifications, stores alert history |
 | **Dashboard Service** | Aggregates data from the Monitoring Service, exposes a REST overview and a real-time SSE stream |
+| **Demo Service** | Simulates a monitored service — cycles through HEALTHY, DEGRADED (slow responses), DOWN (503), and RECOVERING states automatically on a timer, generating realistic alerts and status history without manual intervention |
 
 ---
 
@@ -73,7 +77,9 @@ cd serviceUptimeMonitor
 docker compose up --build
 ```
 
-The first build downloads Maven dependencies and compiles all three services — this takes a few minutes. Subsequent starts are fast.
+The first build downloads Maven dependencies and compiles all services — this takes a few minutes. Subsequent starts are fast.
+
+Six monitored services are seeded automatically on first startup (no manual registration needed). The Demo Service begins cycling through health states immediately, generating alerts and status history within the first few minutes.
 
 ### Service URLs
 
@@ -98,31 +104,19 @@ Each service starts with an in-memory H2 database and hot-reload via Spring DevT
 
 ## Quick Demo
 
-### 1 — Register a service to monitor
-
-```bash
-curl -X POST http://localhost:8080/api/monitoring/services \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My API",
-    "url": "https://httpstat.us/200",
-    "checkIntervalSeconds": 30
-  }'
-```
-
-### 2 — Check the current status of all services
+### 1 — Check the current status of all services
 
 ```bash
 curl http://localhost:8080/api/monitoring/read/current-statuses
 ```
 
-### 3 — Subscribe to real-time status updates (SSE)
+### 2 — Subscribe to real-time status updates (SSE)
 
 ```bash
 curl -N http://localhost:8083/api/dashboard/stream
 ```
 
-### 4 — View alert history
+### 3 — View alert history
 
 ```bash
 curl http://localhost:8082/api/alerts
@@ -145,7 +139,7 @@ Full interactive docs are available via Swagger UI when the services are running
 | `PATCH` | `/api/monitoring/services/{id}/enable` | Resume health checks |
 | `PATCH` | `/api/monitoring/services/{id}/disable` | Pause health checks |
 | `DELETE` | `/api/monitoring/services/{id}` | Remove a service and its history |
-| `GET` | `/api/monitoring/read/current-statuses` | Latest check result per service |
+| `GET` | `/api/monitoring/read/current-statuses` | Latest check serviceHealthStatusResult per service |
 | `GET` | `/api/monitoring/read/history/{serviceId}` | Full check history for a service |
 | `GET` | `/actuator/prometheus` | Prometheus metrics |
 
@@ -171,7 +165,7 @@ Full interactive docs are available via Swagger UI when the services are running
 
 ## Observability
 
-The Monitoring Service exposes Prometheus metrics at `/actuator/prometheus`. Grafana starts pre-configured with Prometheus as a data source — log in at `http://localhost:3000` (`admin` / `admin`) to explore metrics and build dashboards.
+The Monitoring Service exposes Prometheus metrics at `/actuator/prometheus`. Grafana starts pre-configured with both a Prometheus datasource and a provisioned **Service Uptime Monitor** dashboard — log in at `http://localhost:3000` (`admin` / `admin`) to view it immediately. The dashboard includes 9 panels covering HTTP request rate, response time, JVM heap memory, DB connection pool, and Tomcat thread pool.
 
 ---
 
@@ -179,7 +173,7 @@ The Monitoring Service exposes Prometheus metrics at `/actuator/prometheus`. Gra
 
 ### SSE stream is polling-based
 
-`DashboardSseService` polls the Monitoring Service every 30 s and pushes the result to subscribers. Clients therefore see updates with up to 30 s latency, and the dashboard service makes one HTTP call per interval regardless of how many clients are connected.
+`DashboardSseService` polls the Monitoring Service every 30 s and pushes the serviceHealthStatusResult to subscribers. Clients therefore see updates with up to 30 s latency, and the dashboard service makes one HTTP call per interval regardless of how many clients are connected.
 
 A production alternative would be to publish status-change events to a message broker (Kafka or RabbitMQ). The Dashboard Service would consume those events and push them immediately — zero polling overhead, instant fan-out to all SSE clients.
 
@@ -233,8 +227,12 @@ serviceUptimeMonitor/
 │       ├── controller/    # DashboardController
 │       ├── dto/           # Dashboard DTOs
 │       └── service/       # DashboardService, DashboardSseService
+├── demo-service/          # Go service simulating service lifecycle (HEALTHY → DEGRADED → DOWN → RECOVERING)
+│   ├── main.go
+│   ├── go.mod
+│   └── Dockerfile
 ├── docker/
-│   ├── grafana/           # Grafana datasource provisioning (Prometheus)
+│   ├── grafana/           # Grafana datasource + pre-provisioned dashboard
 │   ├── postgres/          # DB init script (creates alert_db)
 │   └── prometheus/        # Prometheus scrape config
 ├── docker-compose.yml
