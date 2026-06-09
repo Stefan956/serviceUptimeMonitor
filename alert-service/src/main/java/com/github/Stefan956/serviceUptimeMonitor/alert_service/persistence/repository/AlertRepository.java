@@ -1,6 +1,6 @@
-package com.github.Stefan956.serviceUptimeMonitor.alert_service.dao;
+package com.github.Stefan956.serviceUptimeMonitor.alert_service.persistence.repository;
 
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.Alert;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.persistence.entity.Alert;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;
 import org.springframework.data.domain.Page;

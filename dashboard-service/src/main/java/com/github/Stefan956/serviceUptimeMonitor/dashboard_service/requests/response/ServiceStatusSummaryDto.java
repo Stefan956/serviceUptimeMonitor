@@ -1,4 +1,4 @@
-package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto;
+package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response;
 
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.enums.ServiceHealthStatus;
 import io.swagger.v3.oas.annotations.media.Schema;

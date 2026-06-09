@@ -1,8 +1,8 @@
 package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.client;
 
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.MonitoredServiceDto;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusHistoryDto;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.MonitoredServiceDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.ServiceStatusHistoryDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.ServiceStatusSummaryDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.enums.ServiceHealthStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

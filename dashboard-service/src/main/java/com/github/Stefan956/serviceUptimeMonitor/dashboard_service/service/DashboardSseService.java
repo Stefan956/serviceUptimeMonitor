@@ -1,7 +1,7 @@
 package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.service;
 
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.client.MonitoringServiceClient;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.ServiceStatusSummaryDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.github.Stefan956.serviceUptimeMonitor.alert_service.dto;
+package com.github.Stefan956.serviceUptimeMonitor.alert_service.requests.response;
 
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.ServiceHealthStatus;

@@ -1,10 +1,10 @@
 package com.github.Stefan956.serviceUptimeMonitor.alert_service.service;
 
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.dao.AlertRepository;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertRequestDto;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertResponseDto;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.persistence.repository.AlertRepository;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.requests.request.AlertRequestDto;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.requests.response.AlertResponseDto;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.exception.AlertProcessingException;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.model.Alert;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.persistence.entity.Alert;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.enums.NotificationChannel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

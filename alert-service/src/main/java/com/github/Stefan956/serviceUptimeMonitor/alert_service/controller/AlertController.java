@@ -1,7 +1,7 @@
 package com.github.Stefan956.serviceUptimeMonitor.alert_service.controller;
 
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertRequestDto;
-import com.github.Stefan956.serviceUptimeMonitor.alert_service.dto.AlertResponseDto;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.requests.request.AlertRequestDto;
+import com.github.Stefan956.serviceUptimeMonitor.alert_service.requests.response.AlertResponseDto;
 import com.github.Stefan956.serviceUptimeMonitor.alert_service.service.AlertProcessorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

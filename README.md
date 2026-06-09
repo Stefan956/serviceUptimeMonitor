@@ -191,9 +191,9 @@ cd monitoring-service && mvn test
 
 | Service | Tests |
 |---|---|
-| Monitoring Service | 73 |
-| Alert Service | 33 |
-| Dashboard Service | 37 |
+| Monitoring Service | 76 |
+| Alert Service | 34 |
+| Dashboard Service | 35 |
 
 ---
 
@@ -203,30 +203,46 @@ cd monitoring-service && mvn test
 serviceUptimeMonitor/
 ├── monitoring-service/
 │   ├── src/main/java/
-│   │   ├── client/        # AlertServiceClient (WebClient)
-│   │   ├── configuration/ # WebClientConfig
-│   │   ├── controller/    # MonitoredServiceController, MonitoringReadController
-│   │   ├── dao/           # JPA repositories
-│   │   ├── dto/           # Request / response records
-│   │   ├── exception/     # GlobalExceptionHandler
-│   │   ├── mapper/        # Entity ↔ DTO mapping
-│   │   ├── model/         # JPA entities, enums
-│   │   ├── scheduler/     # MonitoringScheduler (@Scheduled)
-│   │   └── service/       # MonitoringService, MonitoredServiceManagementService, ...
+│   │   ├── client/                  # AlertServiceClient (WebClient)
+│   │   ├── configuration/           # WebClientConfig
+│   │   ├── controller/              # MonitoredServiceController, MonitoringReadController
+│   │   ├── enums/                   # ServiceHealthStatus
+│   │   ├── exception/               # GlobalExceptionHandler
+│   │   ├── mapper/                  # Entity ↔ DTO mapping
+│   │   ├── persistence/
+│   │   │   ├── entity/              # JPA entities (BaseEntity, MonitoredService, ServiceStatus)
+│   │   │   └── repository/          # Spring Data repositories (DAOs)
+│   │   ├── requests/
+│   │   │   ├── event/               # ServiceStatusChangeEvent
+│   │   │   ├── request/             # Inbound request DTOs
+│   │   │   └── response/            # Outbound response DTOs
+│   │   ├── scheduler/               # MonitoringScheduler (@Scheduled)
+│   │   ├── service/                 # MonitoringService, MonitoredServiceManagementService, ...
+│   │   └── util/                    # Constants
 │   └── src/test/
-├── alert-service/
+├── alert-service/                   # same layout as monitoring-service
 │   └── src/main/java/
-│       ├── controller/    # AlertController
-│       ├── dao/           # AlertRepository
-│       ├── dto/           # AlertRequestDto, AlertResponseDto
-│       ├── model/         # Alert entity
-│       └── service/       # AlertProcessorService, EmailAlertService, ...
-├── dashboard-service/
+│       ├── controller/              # AlertController
+│       ├── enums/                   # NotificationChannel, ServiceHealthStatus
+│       ├── exception/               # GlobalExceptionHandler, AlertProcessingException
+│       ├── persistence/
+│       │   ├── entity/              # Alert entity
+│       │   └── repository/          # AlertRepository
+│       ├── requests/
+│       │   ├── request/             # AlertRequestDto
+│       │   └── response/            # AlertResponseDto
+│       └── service/                 # AlertProcessorService, EmailAlertService, ...
+├── dashboard-service/               # read-only client — no persistence layer
 │   └── src/main/java/
-│       ├── client/        # MonitoringServiceClient (WebClient)
-│       ├── controller/    # DashboardController
-│       ├── dto/           # Dashboard DTOs
-│       └── service/       # DashboardService, DashboardSseService
+│       ├── client/                  # MonitoringServiceClient (WebClient)
+│       ├── configuration/           # WebClientConfig
+│       ├── controller/              # DashboardController
+│       ├── enums/                   # ServiceHealthStatus
+│       ├── exception/               # GlobalExceptionHandler
+│       ├── requests/
+│       │   └── response/            # Dashboard response DTOs
+│       ├── service/                 # DashboardService, DashboardSseService
+│       └── util/                    # Constants
 ├── demo-service/          # Go service simulating service lifecycle (HEALTHY → DEGRADED → DOWN → RECOVERING)
 │   ├── main.go
 │   ├── go.mod

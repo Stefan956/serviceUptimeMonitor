@@ -1,8 +1,8 @@
 package com.github.Stefan956.serviceUptimeMonitor.dashboard_service.client;
 
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.MonitoredServiceDto;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusHistoryDto;
-import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.dto.ServiceStatusSummaryDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.MonitoredServiceDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.ServiceStatusHistoryDto;
+import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.requests.response.ServiceStatusSummaryDto;
 import com.github.Stefan956.serviceUptimeMonitor.dashboard_service.util.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
